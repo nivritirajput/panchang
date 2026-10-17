@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Panchang Calendar</title>
+<meta name="description" content="Panchang Calendar by Nivriti Rajput: daily Hindu panchang (tithi, nakshatra, yoga, karana), sunrise, moonrise, Rahu Kaal, choghadiya, hora, festivals and vrats for Indian cities, in English and Hindi.">
+<meta name="theme-color" content="#e8590c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff7ef; --card:#ffffff; --cell:#fffcf8; --soft:#fff0e2;
+    --ink:#3a2314; --muted:#8c6a55; --line:#f3dfcb;
+    --accent:#e8590c; --accent-d:#b8430a; --accent-2:#ffb347; --gold:#d99a00; --gold-l:#fff4d6;
+    --glow1:#ffe3c4; --glow2:#ffe6ef;
+    --green:#2f9e5b; --green-l:#e5f6eb; --red:#d9534f; --red-l:#fde8e7; --blue:#3a7bd5; --blue-l:#e7f0fd; --purple:#7c4dff; --purple-l:#efe9ff;
+    --night:#2b2350; --shadow:0 8px 24px rgba(160,80,20,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15100c; --card:#221a14; --cell:#2a2019; --soft:#33271d;
+      --ink:#f7eadc; --muted:#c4a68f; --line:#443528;
+      --accent:#ff8c42; --accent-d:#ffb070; --accent-2:#ffcf8a; --gold:#f0c040; --gold-l:#3a3018;
+      --glow1:#2a1c10; --glow2:#2a1520;
+      --green:#5cc98a; --green-l:#1d3627; --red:#ff7b76; --red-l:#3d2222; --blue:#7fb0ff; --blue-l:#1c2738; --purple:#b49cff; --purple-l:#2a2347;
+      --night:#0c0a1c; --shadow:0 8px 24px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15100c; --card:#221a14; --cell:#2a2019; --soft:#33271d;
+    --ink:#f7eadc; --muted:#c4a68f; --line:#443528;
+    --accent:#ff8c42; --accent-d:#ffb070; --accent-2:#ffcf8a; --gold:#f0c040; --gold-l:#3a3018;
+    --glow1:#2a1c10; --glow2:#2a1520;
+    --green:#5cc98a; --green-l:#1d3627; --red:#ff7b76; --red-l:#3d2222; --blue:#7fb0ff; --blue-l:#1c2738; --purple:#b49cff; --purple-l:#2a2347;
+    --night:#0c0a1c; --shadow:0 8px 24px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:'Nunito','Baloo 2',system-ui,sans-serif;color:var(--ink);line-height:1.5;min-height:100vh;overflow-x:hidden;
+    background:radial-gradient(circle at 8% 0%,var(--glow1) 0,transparent 40%),radial-gradient(circle at 100% 25%,var(--glow2) 0,transparent 35%),var(--bg);transition:background-color .3s,color .3s}
+  h1,h2,h3,button,select,.bal{font-family:'Baloo 2',system-ui,sans-serif}
+  .wrap{max-width:1560px;margin:0 auto;padding:0 16px 40px}
+  .card{background:var(--card);border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:16px;margin-bottom:14px;min-width:0}
+  .card h2{font-size:1.2rem;color:var(--accent-d);line-height:1.2;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .card h2 small{font-family:Nunito;font-size:.8rem;color:var(--muted);font-weight:700}
+  .card h3{font-size:1.02rem;margin:10px 0 4px}
+  .sub{color:var(--muted);font-weight:600;font-size:.88rem}
+  .hidden{display:none!important}
+
+  /* header */
+  header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 0 12px}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .logo{width:50px;height:50px;border-radius:16px;flex:none;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 6px 16px rgba(0,0,0,.15);animation:diya 3s ease-in-out infinite}
+  @keyframes diya{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg) translateY(-3px)}}
+  .brand h1{font-size:1.8rem;line-height:1;color:var(--accent-d)}
+  .brand small{display:block;color:var(--muted);font-weight:700;font-size:.88rem;margin-top:3px}
+  .hctl{display:flex;gap:8px;align-items:center;flex:none}
+  .btn{cursor:pointer;font-weight:700;font-size:1rem;padding:7px 14px;border-radius:12px;background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 2px 0 var(--line);transition:transform .15s;line-height:1.3}
+  .btn:hover{transform:translateY(-2px)} .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent-d);box-shadow:0 3px 0 var(--accent-d)}
+  :root[data-theme="dark"] .btn.primary{color:#1a120c}
+  .btn.sm{font-size:.86rem;padding:3px 10px;border-radius:10px}
+  .seg{display:inline-flex;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:3px;gap:3px}
+  .seg button{border:none;background:transparent;font-weight:700;font-size:.96rem;padding:6px 12px;border-radius:10px;cursor:pointer;color:var(--ink);white-space:nowrap}
+  .seg button.on{background:var(--accent);color:#fff}
+  :root[data-theme="dark"] .seg button.on{color:#1a120c}
+  .mainnav{display:flex;width:100%;margin-bottom:14px;background:var(--card)}
+  .mainnav button{flex:1;font-size:1.02rem;padding:8px 4px}
+  .options{display:none;flex-wrap:wrap;gap:14px 22px;align-items:flex-start}
+  .options.open{display:flex;animation:fadeUp .25s ease both}
+  .opt{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  select,input{font:inherit;font-weight:700;font-size:.98rem;color:var(--ink);background:var(--cell);border:2px solid var(--line);border-radius:12px;padding:8px 10px;outline:none;max-width:100%}
+  select:focus,input:focus{border-color:var(--accent)}
+
+  /* dashboard layout */
+  .dash{display:grid;grid-template-columns:1fr;gap:0 16px;align-items:start}
+  .dash>*{min-width:0}
+  .side{display:none}
+  .cards2{display:grid;grid-template-columns:1fr;gap:0 14px;align-items:start}
+  .cards2>*{min-width:0}
+
+  /* date nav */
+  .dnav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+  .dnav .btn{font-size:1.15rem;padding:6px 14px}
+  .dnav .mid{text-align:center;line-height:1.15;min-width:0}
+  .dnav .mid b{font-family:'Baloo 2';font-size:1.3rem;color:var(--accent-d);display:block}
+  .dnav .mid span{font-size:.84rem;font-weight:700;color:var(--muted)}
+  .dnav-tools{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:-4px 0 12px}
+  .dnav-tools input{padding:4px 8px;font-size:.9rem}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center;position:relative;overflow:hidden}
+  .moon{width:96px;height:96px;grid-row:span 3;filter:drop-shadow(0 6px 14px rgba(0,0,0,.18))}
+  .hero .tname{font-family:'Baloo 2';font-size:1.6rem;line-height:1.1;color:var(--accent-d)}
+  .hero .tmeta{font-weight:700;color:var(--muted);font-size:.9rem}
+  .festbar{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .fchip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 12px;font-weight:800;font-size:.88rem;background:var(--gold-l);border:2px solid var(--gold);cursor:pointer;color:var(--ink);font-family:Nunito}
+  .fchip.vrat{background:var(--purple-l);border-color:var(--purple)}
+  .fchip.nat{background:var(--blue-l);border-color:var(--blue)}
+
+  /* rows of panchang elements */
+  .el{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .el:last-child{border-bottom:none}
+  .el .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;background:var(--soft)}
+  .el small{display:block;font-size:.74rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .el b{font-family:'Baloo 2';font-size:1.06rem;line-height:1.2;display:block}
+  .el em{font-style:normal;font-size:.82rem;color:var(--muted);font-weight:700;display:block}
+  .el .tm{text-align:right;font-weight:800;font-size:.86rem;white-space:nowrap}
+  .el .tm span{display:block;font-size:.72rem;color:var(--muted);font-weight:700}
+  .el.next{opacity:.8}
+  .el.next .ic{background:transparent;border:2px dashed var(--line)}
+  .good{color:var(--green)} .bad{color:var(--red)}
+  .tag{display:inline-block;font-size:.72rem;font-weight:800;border-radius:999px;padding:0 8px;margin-left:4px;vertical-align:1px}
+  .tag.g{background:var(--green-l);color:var(--green)} .tag.b{background:var(--red-l);color:var(--red)} .tag.n{background:var(--soft);color:var(--muted)}
+
+  /* sun & moon */
+  .sm{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .sm div{background:var(--cell);border:1px solid var(--line);border-radius:14px;padding:8px 4px;text-align:center}
+  .sm div span{display:block;font-size:1.4rem;line-height:1.2}
+  .sm div b{display:block;font-size:.98rem}
+  .sm div small{display:block;font-size:.72rem;color:var(--muted);font-weight:800}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:.92rem}
+  .kv dt{font-weight:800;color:var(--muted)}
+  .kv dd{font-weight:700;min-width:0}
+
+  /* timeline */
+  .tline{position:relative;height:46px;border-radius:12px;overflow:hidden;background:var(--night);margin:8px 0 4px}
+  .tline .dayp{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#ffd58a,#ffe9b8 50%,#ffd58a)}
+  .tline .blk{position:absolute;top:22px;bottom:4px;border-radius:6px;font-size:.62rem;font-weight:800;color:#fff;display:grid;place-items:center;overflow:hidden;white-space:nowrap}
+  .tline .blk.rahu{background:var(--red)} .tline .blk.abh{background:var(--green)} .tline .blk.yama{background:#a0522d} .tline .blk.guli{background:#6d6d6d}
+  .tline .now{position:absolute;top:0;bottom:0;width:3px;background:var(--accent);box-shadow:0 0 0 2px #fff}
+  .tline .hr{position:absolute;top:3px;font-size:.6rem;font-weight:800;color:rgba(255,255,255,.75);transform:translateX(-50%)}
+  .tline .dayp~.hr{color:rgba(0,0,0,.45)}
+  .tlegend{display:flex;flex-wrap:wrap;gap:10px;font-size:.78rem;font-weight:700;color:var(--muted)}
+  .tlegend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+
+  /* muhurat list */
+  .mu{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.93rem}
+  .mu:last-child{border-bottom:none}
+  .mu b{font-weight:800}
+  .mu .t{font-weight:800;white-space:nowrap}
+  .mu.isnow{background:var(--soft);border-radius:10px;padding-left:8px;padding-right:8px}
+
+  /* choghadiya & hora */
+  .chg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .ch{border-radius:12px;padding:6px 8px;font-size:.84rem;font-weight:700;border:2px solid transparent;display:flex;justify-content:space-between;gap:6px}
+  .ch.g{background:var(--green-l)} .ch.b{background:var(--red-l)} .ch.n{background:var(--blue-l)}
+  .ch.isnow{border-color:var(--accent);box-shadow:0 0 0 2px var(--glow1)}
+  .ch b{font-family:'Baloo 2';font-size:.95rem}
+  .ch span{white-space:nowrap;color:var(--muted)}
+  .hora{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:.82rem}
+  .hora div{display:flex;justify-content:space-between;gap:6px;padding:4px 8px;border-radius:8px;background:var(--cell);font-weight:700}
+  .hora div.isnow{background:var(--soft);outline:2px solid var(--accent)}
+
+  /* month grid */
+  .mhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .mhead b{font-family:'Baloo 2';font-size:1.25rem;color:var(--accent-d);text-align:center;line-height:1.1}
+  .mhead b small{display:block;font-family:Nunito;font-size:.78rem;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+  .grid .wd{text-align:center;font-size:.76rem;font-weight:800;color:var(--muted);padding:2px 0}
+  .grid .wd.sun{color:var(--red)}
+  .day{position:relative;background:var(--cell);border:2px solid var(--line);border-radius:12px;min-height:92px;padding:5px 6px;cursor:pointer;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;gap:1px;overflow:hidden;transition:transform .12s}
+  .day:hover{transform:translateY(-2px);border-color:var(--accent-2)}
+  .day .dn{font-family:'Baloo 2';font-weight:800;font-size:1.15rem;line-height:1}
+  .day.sun .dn{color:var(--red)}
+  .day .ti{font-size:.72rem;font-weight:800;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day .fe{font-size:.7rem;font-weight:800;color:var(--accent-d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day .fe.v{color:var(--purple)}
+  .day .mo{position:absolute;top:5px;right:5px;width:16px;height:16px}
+  .day.today{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-l)}
+  .day.sel{border-color:var(--accent);background:var(--soft)}
+  .day.blank{visibility:hidden}
+  .day .dots{display:flex;gap:2px;margin-top:auto}
+  .day .dots i{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  .day .dots i.v{background:var(--purple)} .day .dots i.n{background:var(--blue)}
+  .mini .day{min-height:42px;padding:3px;align-items:center;justify-content:flex-start;border-radius:10px}
+  .mini .day .dn{font-size:.95rem}
+  .mini .day .ti,.mini .day .fe{display:none}
+  .mini .day .mo{width:11px;height:11px;top:3px;right:3px}
+  .mini .grid{gap:3px}
+
+  /* festival list */
+  .flist .fm{font-family:'Baloo 2';font-size:1.1rem;color:var(--accent-d);margin:14px 0 4px;border-bottom:2px solid var(--line)}
+  details.fe{border-bottom:1px dashed var(--line)}
+  details.fe>summary{list-style:none;display:grid;grid-template-columns:54px 1fr auto;gap:10px;align-items:center;padding:8px 0;cursor:pointer}
+  details.fe>summary::-webkit-details-marker{display:none}
+  .fdate{text-align:center;border-radius:12px;background:var(--soft);padding:4px 0;line-height:1.05}
+  .fdate b{display:block;font-family:'Baloo 2';font-size:1.3rem;color:var(--accent-d)}
+  .fdate small{font-size:.7rem;font-weight:800;color:var(--muted)}
+  .fname b{font-family:'Baloo 2';font-size:1.05rem;display:block;line-height:1.2}
+  .fname em{font-style:normal;font-size:.8rem;color:var(--muted);font-weight:700}
+  .fcount{font-size:.78rem;font-weight:800;color:var(--muted);text-align:right;white-space:nowrap}
+  .fbody{padding:0 0 12px 64px;font-size:.93rem;animation:fadeUp .25s both}
+  .fbody p{margin:4px 0}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+  .chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.86rem;cursor:pointer;color:var(--ink);font-family:Nunito}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .nextf{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+  .nextf .em{font-size:3rem;grid-row:span 3;animation:float 4s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .nextf .cd{font-family:'Baloo 2';font-size:1.6rem;color:var(--accent-d);line-height:1.1}
+
+  /* learn */
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{text-align:left;padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .learn p{margin:6px 0}
+  .subnav{display:flex;flex-wrap:wrap;width:100%;margin-bottom:12px}
+  .subnav button{flex:1}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,140px);background:var(--ink);color:var(--bg);font-weight:700;padding:10px 18px;border-radius:12px;transition:transform .3s;z-index:30;max-width:calc(100% - 32px);text-align:center}
+  .toast.show{transform:translate(-50%,0)}
+  footer{text-align:center;color:var(--muted);font-size:.84rem;margin-top:22px;font-weight:600}
+  .madeby{font-family:'Baloo 2';font-size:1.15rem;color:var(--accent-d);margin-top:6px;font-weight:700}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .view{animation:fadeUp .3s ease both}
+
+  /* ---------- TABLET 700–1099 ---------- */
+  @media (min-width:700px){
+    .cards2{grid-template-columns:1fr 1fr}
+    .cards2>.wide{grid-column:1/-1}
+    .chg{grid-template-columns:1fr 1fr}
+    .hora{grid-template-columns:repeat(3,1fr)}
+  }
+  /* ---------- LAPTOP 1100–1439: sidebar + main ---------- */
+  @media (min-width:1100px){
+    .dash{grid-template-columns:330px 1fr}
+    .side{display:block;position:sticky;top:12px}
+    .dnav-mobile{display:none}
+    .aside{grid-column:2}
+  }
+  /* ---------- DESKTOP ≥1440: sidebar + main + timings ---------- */
+  @media (min-width:1440px){
+    .dash{grid-template-columns:330px 1fr 360px}
+    .aside{grid-column:3;grid-row:1;position:sticky;top:12px}
+    .aside .chg{grid-template-columns:1fr}
+    .aside .hora{grid-template-columns:1fr 1fr}
+  }
+  /* ---------- PHONE <700 ---------- */
+  @media (max-width:699px){
+    header{padding:12px 0 10px}
+    .brand small{display:none}
+    .brand h1{font-size:1.45rem}
+    .logo{width:42px;height:42px;font-size:22px}
+    .hctl .btn{padding:6px 10px}
+    .mainnav button{font-size:.92rem;padding:7px 2px}
+    .card{padding:13px;border-radius:18px}
+    .moon{width:78px;height:78px}
+    .hero .tname{font-size:1.35rem}
+    .sm{grid-template-columns:repeat(2,1fr)}
+    .day{min-height:56px;padding:3px 4px;border-radius:10px}
+    .day .dn{font-size:1rem}
+    .day .fe{display:none}
+    .day .ti{font-size:.64rem}
+    .day .mo{width:12px;height:12px;top:3px;right:3px}
+    .grid{gap:3px}
+    .fbody{padding-left:0}
+    .options .opt{width:100%}
+    .chg{grid-template-columns:1fr}
+  }
+  @media print{
+    .hctl,.mainnav,.options,.noprint,.toast,.side{display:none!important}
+    body{background:#fff}
+    .card{box-shadow:none;break-inside:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="logo">🪔</div><div><h1 id="appName">Panchang</h1><small id="tagline"></small></div></div>
+    <div class="hctl"><button class="btn" id="langBtn"></button><button class="btn" id="optBtn" aria-label="Options" aria-expanded="false">⚙️</button></div>
+  </header>
+  <section class="card options" id="options" aria-label="Options"></section>
+  <nav class="seg mainnav" id="mainNav" role="tablist"></nav>
+  <main id="app" aria-live="polite"></main>
+  <footer><p id="disclaimer"></p><div class="madeby">Made by Nivriti Rajput 💜</div></footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =========================================================
+   Panchang engine — sun & moon positions (Meeus, low/medium precision),
+   Lahiri ayanamsa, sunrise/moonrise, tithi, nakshatra, yoga, karana,
+   lunar month, muhurats, choghadiya, hora, vrats.
+   All times are Julian Days (UT). Angles in degrees.
+   ========================================================= */
+const PE = (() => {
+  const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+  const norm = a => ((a % 360) + 360) % 360;
+  const sin = d => Math.sin(d * D2R), cos = d => Math.cos(d * D2R);
+
+  const jdFromDate = d => d.getTime() / 86400000 + 2440587.5;
+  const dateFromJd = jd => new Date((jd - 2440587.5) * 86400000);
+  // civil date (y,m,d at local midnight) -> JD UT, tz in hours
+  const jdLocalMidnight = (y, m, d, tz) => Date.UTC(y, m - 1, d) / 86400000 + 2440587.5 - tz / 24;
+  const deltaT = jd => { const y = 2000 + (jd - 2451545) / 365.25; return (69 + 0.35 * (y - 2026)) / 86400; };
+
+  /* ---------- nutation (main terms) ---------- */
+  function nutation(T) {
+    const Om = 125.04452 - 1934.136261 * T, L = 280.4665 + 36000.7698 * T, Lp = 218.3165 + 481267.8813 * T;
+    const dpsi = (-17.2 * sin(Om) - 1.32 * sin(2 * L) - 0.23 * sin(2 * Lp) + 0.21 * sin(2 * Om)) / 3600;
+    const deps = (9.2 * cos(Om) + 0.57 * cos(2 * L) + 0.1 * cos(2 * Lp) - 0.09 * cos(2 * Om)) / 3600;
+    return { dpsi, deps };
+  }
+  const obliquity = T => 23.4392911 - 0.0130042 * T - 1.64e-7 * T * T + 5.04e-7 * T * T * T;
+
+  /* ---------- Sun (Meeus ch.25) ---------- */
+  function sunTrop(jd) {
+    const T = (jd + deltaT(jd) - 2451545) / 36525;
+    const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
+    const M = 357.52911 + 35999.05029 * T - 0.0001537 * T * T;
+    const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * sin(M) + (0.019993 - 0.000101 * T) * sin(2 * M) + 0.000289 * sin(3 * M);
+    const Om = 125.04 - 1934.136 * T;
+    const lam = L0 + C - 0.00569 - 0.00478 * sin(Om);
+    return { lon: norm(lam), lat: 0, T };
+  }
+
+  /* ---------- Moon (Meeus ch.47) ---------- */
+  // [D, M, M', F, Σl (1e-6 deg), Σr (1e-3 km)]
+  const ML = [
+    [0,0,1,0,6288774,-20905355],[2,0,-1,0,1274027,-3699111],[2,0,0,0,658314,-2955968],[0,0,2,0,213618,-569925],
+    [0,1,0,0,-185116,48888],[0,0,0,2,-114332,-3149],[2,0,-2,0,58793,246158],[2,-1,-1,0,57066,-152138],
+    [2,0,1,0,53322,-170733],[2,-1,0,0,45758,-204586],[0,1,-1,0,-40923,-129620],[1,0,0,0,-34720,108743],
+    [0,1,1,0,-30383,104755],[2,0,0,-2,15327,10321],[0,0,1,2,-12528,0],[0,0,1,-2,10980,79661],
+    [4,0,-1,0,10675,-34782],[0,0,3,0,10034,-23210],[4,0,-2,0,8548,-21636],[2,1,-1,0,-7888,24208],
+    [2,1,0,0,-6766,30824],[1,0,-1,0,-5163,-8379],[1,1,0,0,4987,-16675],[2,-1,1,0,4036,-12831],
+    [2,0,2,0,3994,-10445],[4,0,0,0,3861,-11650],[2,0,-3,0,3665,14403],[0,1,-2,0,-2689,-7003],
+    [2,0,-1,2,-2602,0],[2,-1,-2,0,2390,10056],[1,0,1,0,-2348,6322],[2,-2,0,0,2236,-9884],
+    [0,1,2,0,-2120,5751],[0,2,0,0,-2069,0],[2,-2,-1,0,2048,-4950],[2,0,1,-2,-1773,4130],
+    [2,0,0,2,-1595,0],[4,-1,-1,0,1215,-3958],[0,0,2,2,-1110,0],[3,0,-1,0,-892,3258],
+    [2,1,1,0,-810,2616],[4,-1,-2,0,759,-1897],[0,2,-1,0,-713,-2117],[2,2,-1,0,-700,2354],
+    [2,1,-2,0,691,0],[2,-1,0,-2,596,0],[4,0,1,0,549,-1423],[0,0,4,0,537,-1117],
+    [4,-1,0,0,520,-1571],[1,0,-2,0,-487,-1739],[2,1,0,-2,-399,0],[0,0,2,-2,-381,-4421],
+    [1,1,1,0,351,0],[3,0,-2,0,-340,0],[4,0,-3,0,330,0],[2,-1,2,0,327,0],
+    [0,2,1,0,-323,1165],[1,1,-1,0,299,0],[2,0,3,0,294,0],[2,0,-1,-2,0,8752]];
+  // [D, M, M', F, Σb (1e-6 deg)]
+  const MB = [
+    [0,0,0,1,5128122],[0,0,1,1,280602],[0,0,1,-1,277693],[2,0,0,-1,173237],[2,0,-1,1,55413],[2,0,-1,-1,46271],
+    [2,0,0,1,32573],[0,0,2,1,17198],[2,0,1,-1,9266],[0,0,2,-1,8822],[2,-1,0,-1,8216],[2,0,-2,-1,4324],
+    [2,0,1,1,4200],[2,1,0,-1,-3359],[2,-1,-1,1,2463],[2,-1,0,1,2211],[2,-1,-1,-1,2065],[0,1,-1,-1,-1870],
+    [4,0,-1,-1,1828],[0,1,0,1,-1794],[0,0,0,3,-1749],[0,1,-1,1,-1565],[1,0,0,1,-1491],[0,1,1,1,-1475],
+    [0,1,1,-1,-1410],[0,1,0,-1,-1344],[1,0,0,-1,-1335],[0,0,3,1,1107],[4,0,0,-1,1021],[4,0,-1,1,833]];
+  function moonTrop(jd) {
+    const T = (jd + deltaT(jd) - 2451545) / 36525, T2 = T * T, T3 = T2 * T, T4 = T3 * T;
+    const Lp = 218.3164477 + 481267.88123421 * T - 0.0015786 * T2 + T3 / 538841 - T4 / 65194000;
+    const D = 297.8501921 + 445267.1114034 * T - 0.0018819 * T2 + T3 / 545868 - T4 / 113065000;
+    const M = 357.5291092 + 35999.0502909 * T - 0.0001536 * T2 + T3 / 24490000;
+    const Mp = 134.9633964 + 477198.8675055 * T + 0.0087414 * T2 + T3 / 69699 - T4 / 14712000;
+    const F = 93.272095 + 483202.0175233 * T - 0.0036539 * T2 - T3 / 3526000 + T4 / 863310000;
+    const A1 = 119.75 + 131.849 * T, A2 = 53.09 + 479264.29 * T, A3 = 313.45 + 481266.484 * T;
+    const E = 1 - 0.002516 * T - 0.0000074 * T2;
+    let sl = 0, sr = 0, sb = 0;
+    for (const [d, m, mp, f, l, r] of ML) {
+      const arg = d * D + m * M + mp * Mp + f * F, e = Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1;
+      sl += l * e * sin(arg); sr += r * e * cos(arg);
+    }
+    for (const [d, m, mp, f, bb] of MB) {
+      const e = Math.abs(m) === 1 ? E : Math.abs(m) === 2 ? E * E : 1;
+      sb += bb * e * sin(d * D + m * M + mp * Mp + f * F);
+    }
+    sl += 3958 * sin(A1) + 1962 * sin(Lp - F) + 318 * sin(A2);
+    sb += -2235 * sin(Lp) + 382 * sin(A3) + 175 * sin(A1 - F) + 175 * sin(A1 + F) + 127 * sin(Lp - Mp) - 115 * sin(Lp + Mp);
+    const { dpsi } = nutation(T);
+    return { lon: norm(Lp + sl / 1e6 + dpsi), lat: sb / 1e6, dist: 385000.56 + sr / 1000, T };
+  }
+
+  /* ---------- ayanamsa (Lahiri / Chitrapaksha) ---------- */
+  const ayanamsa = jd => { const T = (jd - 2451545) / 36525; return 23.85306 + 1.39654 * T + 0.000308 * T * T; };
+  const sunSid = jd => norm(sunTrop(jd).lon - ayanamsa(jd));
+  const moonSid = jd => norm(moonTrop(jd).lon - ayanamsa(jd));
+  const elong = jd => norm(moonTrop(jd).lon - sunTrop(jd).lon);
+
+  /* ---------- rise / set ---------- */
+  function equatorial(lon, lat, T) {
+    const { deps } = nutation(T), e = obliquity(T) + deps;
+    const ra = Math.atan2(sin(lon) * cos(e) - Math.tan(lat * D2R) * sin(e), cos(lon)) * R2D;
+    const dec = Math.asin(sin(lat) * cos(e) + cos(lat) * sin(e) * sin(lon)) * R2D;
+    return { ra: norm(ra), dec };
+  }
+  function gmst(jd) { const T = (jd - 2451545) / 36525; return norm(280.46061837 + 360.98564736629 * (jd - 2451545) + 0.000387933 * T * T - T * T * T / 38710000); }
+  function altitude(body, jd, lat, lon) {
+    const p = body === 'sun' ? sunTrop(jd) : moonTrop(jd);
+    const { ra, dec } = equatorial(p.lon, p.lat, p.T);
+    const H = gmst(jd) + lon - ra;
+    let alt = Math.asin(sin(lat) * sin(dec) + cos(lat) * cos(dec) * cos(H)) * R2D;
+    if (body === 'moon') {                       // topocentric (parallax) and semi-diameter
+      const hp = Math.asin(6378.14 / p.dist) * R2D;
+      return alt - hp * cos(alt);                // Drik-style: moon centre, no refraction
+    } else alt += 0.2666;                        // sun upper limb
+    return alt + 0.5667;                         // refraction at horizon → event when value = 0
+  }
+  // find crossings of altitude=0 between jd0 and jd1; dir +1 rise, -1 set
+  function crossing(body, jd0, jd1, lat, lon, dir) {
+    const step = 10 / 1440;
+    let t = jd0, a = altitude(body, t, lat, lon);
+    while (t < jd1) {
+      const t2 = Math.min(t + step, jd1), a2 = altitude(body, t2, lat, lon);
+      if ((dir > 0 && a < 0 && a2 >= 0) || (dir < 0 && a > 0 && a2 <= 0)) {
+        let lo = t, hi = t2;
+        for (let i = 0; i < 25; i++) { const mid = (lo + hi) / 2, am = altitude(body, mid, lat, lon); if ((dir > 0) === (am < 0)) lo = mid; else hi = mid; }
+        return (lo + hi) / 2;
+      }
+      t = t2; a = a2;
+    }
+    return null;
+  }
+
+  /* ---------- angle → time solvers ---------- */
+  // find jd near guess where f(jd) (mod 360) == target, f increasing ~rate deg/day
+  function solve(f, target, guess, rate) {
+    let t = guess;
+    for (let i = 0; i < 30; i++) {
+      let d = norm(target - f(t)); if (d > 180) d -= 360;
+      t += d / rate; if (Math.abs(d) < 1e-6) break;
+    }
+    return t;
+  }
+  // start & end of the segment (size deg) that contains jd
+  function segment(f, size, jd, rate) {
+    const v = f(jd), idx = Math.floor(v / size);
+    const start = solve(f, idx * size, jd - (v - idx * size) / rate, rate);
+    const end = solve(f, norm((idx + 1) * size), jd + ((idx + 1) * size - v) / rate, rate);
+    return { idx, start, end };
+  }
+  const sumSid = jd => norm(sunSid(jd) + moonSid(jd));
+
+  const tithiAt = jd => segment(elong, 12, jd, 12.19);
+  const nakAt = jd => segment(moonSid, 360 / 27, jd, 13.18);
+  const yogaAt = jd => segment(sumSid, 360 / 27, jd, 14.17);
+  const karanaAt = jd => segment(elong, 6, jd, 12.19);
+  const moonRashiAt = jd => segment(moonSid, 30, jd, 13.18);
+  const sunRashiAt = jd => segment(sunSid, 30, jd, 0.9856);
+
+  // all segments overlapping [a,b)
+  function segmentsBetween(fn, a, b) {
+    const out = []; let t = a, guard = 0;
+    while (t < b && guard++ < 8) { const s = fn(t); out.push(s); t = s.end + 1e-5; }
+    return out;
+  }
+  function karanaName(k) { // k = 0..59
+    if (k === 0) return 10;               // Kimstughna
+    if (k >= 57) return 7 + (k - 57);     // Shakuni, Chatushpada, Naga
+    return (k - 1) % 7;                   // Bava..Vishti
+  }
+
+  /* ---------- lunar month ---------- */
+  function newMoonBefore(jd) { const e = elong(jd); return solve(elong, 0, jd - e / 12.19, 12.19); }
+  function lunarMonth(jd) {
+    const nm = newMoonBefore(jd), nm2 = solve(elong, 0, nm + 29.6, 12.19);
+    const r1 = Math.floor(sunSid(nm) / 30), r2 = Math.floor(sunSid(nm2) / 30);
+    const amanta = (r1 + 1) % 12;
+    return { amanta, adhik: r1 === r2, start: nm, end: nm2 };
+  }
+
+  /* ---------- day panchang ---------- */
+  const RAHU = [8, 2, 7, 5, 6, 4, 3], YAMA = [5, 4, 3, 2, 1, 7, 6], GULI = [7, 6, 5, 4, 3, 2, 1];
+  const CHOG = ['udveg', 'char', 'labh', 'amrit', 'kaal', 'shubh', 'rog'];
+  const CH_DAY = [0, 3, 6, 2, 5, 1, 4], CH_NIGHT = [5, 1, 4, 0, 3, 6, 2];
+  const HORA_SEQ = ['sun', 'venus', 'mercury', 'moon', 'saturn', 'jupiter', 'mars'];
+  const WD_LORD = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
+
+  function day(y, m, d, place) {
+    const { lat, lon, tz } = place;
+    const mid0 = jdLocalMidnight(y, m, d, tz);
+    const sunrise = crossing('sun', mid0, mid0 + 1, lat, lon, 1);
+    const sunset = crossing('sun', sunrise || mid0, mid0 + 1.2, lat, lon, -1);
+    const nextRise = crossing('sun', mid0 + 1, mid0 + 2, lat, lon, 1);
+    const prevSet = crossing('sun', mid0 - 1, mid0, lat, lon, -1);
+    const moonrise = crossing('moon', mid0, mid0 + 1, lat, lon, 1);
+    const moonset = crossing('moon', mid0, mid0 + 1, lat, lon, -1);
+    const sr = sunrise, ss = sunset, nr = nextRise;
+    const wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+    const dayLen = ss - sr, nightLen = nr - ss;
+    const part = dayLen / 8;
+    const seg = n => ({ start: sr + (n - 1) * part, end: sr + n * part });
+    const noon = sr + dayLen / 2;
+    const prevNightLen = sr - prevSet;
+    const tithis = segmentsBetween(tithiAt, sr, nr);
+    const naks = segmentsBetween(nakAt, sr, nr);
+    const yogas = segmentsBetween(yogaAt, sr, nr);
+    const karanas = segmentsBetween(karanaAt, sr, nr).map(k => ({ ...k, name: karanaName(k.idx) }));
+    const moonR = segmentsBetween(moonRashiAt, sr, nr);
+    const sunR = sunRashiAt(sr);
+    const lm = lunarMonth(sr);
+    const t0 = tithis[0].idx;                    // 0..29
+    const paksha = t0 < 15 ? 'shukla' : 'krishna';
+    const purnimanta = paksha === 'krishna' ? (lm.amanta + 1) % 12 : lm.amanta;
+    const gy = y, vs = (m <= 4 && lm.amanta >= 9) ? gy + 56 : gy + 57;
+    const choghadiya = [];
+    for (let i = 0; i < 8; i++) choghadiya.push({ night: false, type: CHOG[(CH_DAY[wd] + i) % 7], start: sr + i * dayLen / 8, end: sr + (i + 1) * dayLen / 8 });
+    for (let i = 0; i < 8; i++) choghadiya.push({ night: true, type: CHOG[((CH_NIGHT[wd] - 2 * i) % 7 + 14) % 7], start: ss + i * nightLen / 8, end: ss + (i + 1) * nightLen / 8 });
+    const hora = []; const li = HORA_SEQ.indexOf(WD_LORD[wd]);
+    for (let i = 0; i < 24; i++) { const st = i < 12 ? sr + i * dayLen / 12 : ss + (i - 12) * nightLen / 12; hora.push({ lord: HORA_SEQ[(li + i) % 7], start: st, end: st + (i < 12 ? dayLen : nightLen) / 12 }); }
+    const sunLonSr = sunSid(sr);
+    return {
+      y, m, d, wd, place, sunrise: sr, sunset: ss, nextSunrise: nr, moonrise, moonset, dayLen, nightLen,
+      tithis, naks, yogas, karanas, moonRashis: moonR, sunRashi: sunR, sunNak: Math.floor(sunLonSr / (360 / 27)),
+      paksha, amanta: lm.amanta, purnimanta, adhik: lm.adhik, monthStart: lm.start, monthEnd: lm.end,
+      vikram: vs, shaka: vs - 135, ritu: Math.floor(lm.amanta / 2),
+      ayana: (sunLonSr >= 270 || sunLonSr < 90) ? 'uttara' : 'dakshina',
+      rahu: seg(RAHU[wd]), yama: seg(YAMA[wd]), gulika: seg(GULI[wd]),
+      abhijit: { start: noon - dayLen / 30, end: noon + dayLen / 30 },
+      brahma: { start: sr - 2 * prevNightLen / 15, end: sr - prevNightLen / 15 },
+      godhuli: { start: ss - dayLen / 60, end: ss + dayLen / 60 },
+      nishita: { start: ss + nightLen / 2 - nightLen / 30, end: ss + nightLen / 2 + nightLen / 30 },
+      choghadiya, hora, moonPhase: elong(sr), ayanamsa: ayanamsa(sr),
+      moonLon: moonSid(sr), sunLon: sunLonSr
+    };
+  }
+
+  /* ---------- light helpers for month grids & vrats ---------- */
+  function quick(y, m, d, place) {
+    const mid0 = jdLocalMidnight(y, m, d, place.tz);
+    const sr = crossing('sun', mid0, mid0 + 1, place.lat, place.lon, 1);
+    const ss = crossing('sun', sr, mid0 + 1.2, place.lat, place.lon, -1);
+    return { sr, ss, mid0, tSr: Math.floor(elong(sr) / 12), tSs: Math.floor(elong(ss) / 12), tMid: Math.floor(elong((sr + ss) / 2) / 12),
+      tNight: Math.floor(elong(ss + (sr + 1 - ss) / 2) / 12), phase: elong(sr), nak: Math.floor(moonSid(sr) / (360 / 27)), sunR: Math.floor(sunSid(sr) / 30) };
+  }
+
+  return { day, quick, jdLocalMidnight, jdFromDate, dateFromJd, elong, sunSid, moonSid, sunTrop, moonTrop, ayanamsa, tithiAt, nakAt, lunarMonth, crossing, solve, newMoonBefore };
+})();
+if (typeof module !== 'undefined') module.exports = PE;
+
+</script>
+<script>
+'use strict';
+const b=(en,hi)=>({en,hi});
+/* ===================== DATA ===================== */
+const FEST={"festivals": [{"date": "2026-01-03", "id": "pausha-purnima", "en": "Pausha Purnima", "hi": "पौष पूर्णिमा", "type": "vrat"}, {"date": "2026-01-06", "id": "sakat-chauth", "en": "Sakat Chauth", "hi": "सकट चौथ", "type": "vrat"}, {"date": "2026-01-13", "id": "lohri", "en": "Lohri", "hi": "लोहड़ी", "type": "regional", "note": "Punjab; eve of Makar Sankranti"}, {"date": "2026-01-14", "id": "makar-sankranti", "en": "Makar Sankranti", "hi": "मकर संक्रांति", "type": "major"}, {"date": "2026-01-14", "id": "pongal", "en": "Pongal", "hi": "पोंगल", "type": "regional", "note": "Tamil Nadu"}, {"date": "2026-01-14", "id": "shattila-ekadashi", "en": "Shattila Ekadashi", "hi": "षटतिला एकादशी", "type": "vrat"}, {"date": "2026-01-18", "id": "mauni-amavasya", "en": "Mauni Amavasya", "hi": "मौनी अमावस्या", "type": "vrat"}, {"date": "2026-01-23", "id": "vasant-panchami", "en": "Vasant Panchami", "hi": "वसंत पंचमी", "type": "major", "note": "Saraswati Puja"}, {"date": "2026-01-26", "id": "republic-day", "en": "Republic Day", "hi": "गणतंत्र दिवस", "type": "national"}, {"date": "2026-02-01", "id": "magha-purnima", "en": "Magha Purnima", "hi": "माघ पूर्णिमा", "type": "vrat"}, {"date": "2026-02-01", "id": "ravidas-jayanti", "en": "Guru Ravidas Jayanti", "hi": "गुरु रविदास जयंती", "type": "jayanti", "note": "Magha Purnima; single source"}, {"date": "2026-02-15", "id": "maha-shivaratri", "en": "Maha Shivaratri", "hi": "महा शिवरात्रि", "type": "major"}, {"date": "2026-03-03", "id": "holika-dahan", "en": "Holika Dahan", "hi": "होलिका दहन", "type": "major", "note": "Phalguna Purnima; total lunar eclipse same day"}, {"date": "2026-03-04", "id": "holi", "en": "Holi", "hi": "होली", "type": "major"}, {"date": "2026-03-19", "id": "chaitra-navratri-start", "en": "Chaitra Navratri begins", "hi": "चैत्र नवरात्रि प्रारंभ", "type": "major", "note": "Hindu New Year, Vikram Samvat 2083"}, {"date": "2026-03-19", "id": "gudi-padwa-ugadi", "en": "Gudi Padwa / Ugadi", "hi": "गुड़ी पड़वा / उगादि", "type": "regional"}, {"date": "2026-03-21", "id": "eid-al-fitr", "en": "Eid al-Fitr", "hi": "ईद-उल-फ़ित्र", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2026-03-26", "id": "ram-navami", "en": "Ram Navami", "hi": "राम नवमी", "type": "major", "note": "Smarta; ISKCON observes 2026-03-27"}, {"date": "2026-03-31", "id": "mahavir-jayanti", "en": "Mahavir Jayanti", "hi": "महावीर जयंती", "type": "jayanti"}, {"date": "2026-04-02", "id": "hanuman-jayanti", "en": "Hanuman Jayanti", "hi": "हनुमान जयंती", "type": "jayanti", "note": "Chaitra Purnima"}, {"date": "2026-04-03", "id": "good-friday", "en": "Good Friday", "hi": "गुड फ्राइडे", "type": "major"}, {"date": "2026-04-05", "id": "easter", "en": "Easter", "hi": "ईस्टर", "type": "major"}, {"date": "2026-04-14", "id": "baisakhi", "en": "Baisakhi", "hi": "बैसाखी", "type": "regional", "note": "Mesha Sankranti; Punjab"}, {"date": "2026-04-14", "id": "ambedkar-jayanti", "en": "Ambedkar Jayanti", "hi": "अम्बेडकर जयंती", "type": "national"}, {"date": "2026-04-19", "id": "akshaya-tritiya", "en": "Akshaya Tritiya", "hi": "अक्षय तृतीया", "type": "major"}, {"date": "2026-04-19", "id": "parashurama-jayanti", "en": "Parashurama Jayanti", "hi": "परशुराम जयंती", "type": "jayanti"}, {"date": "2026-05-01", "id": "buddha-purnima", "en": "Buddha Purnima", "hi": "बुद्ध पूर्णिमा", "type": "major"}, {"date": "2026-05-16", "id": "vat-savitri", "en": "Vat Savitri Vrat", "hi": "वट सावित्री व्रत", "type": "vrat", "note": "Jyeshtha Amavasya (North India)"}, {"date": "2026-05-16", "id": "shani-jayanti", "en": "Shani Jayanti", "hi": "शनि जयंती", "type": "jayanti"}, {"date": "2026-05-17", "id": "adhik-maas-start", "en": "Adhik (Purushottam) Maas begins", "hi": "अधिक मास प्रारंभ", "type": "vrat", "note": "Adhik Jyeshtha 2026, approx to 2026-06-15; start date approximate"}, {"date": "2026-05-25", "id": "ganga-dussehra", "en": "Ganga Dussehra", "hi": "गंगा दशहरा", "type": "major", "note": "Drik: Adhika Jyeshtha Shukla Dashami; some sources give 2026-06-24 (Nija Jyeshtha) - uncertain"}, {"date": "2026-05-27", "id": "eid-al-adha", "en": "Eid al-Adha (Bakrid)", "hi": "ईद-उल-अज़हा (बकरीद)", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2026-06-15", "id": "adhik-maas-end", "en": "Adhik Maas ends", "hi": "अधिक मास समाप्त", "type": "vrat", "note": "approximate"}, {"date": "2026-06-25", "id": "nirjala-ekadashi", "en": "Nirjala Ekadashi", "hi": "निर्जला एकादशी", "type": "vrat"}, {"date": "2026-06-26", "id": "muharram", "en": "Muharram (Ashura)", "hi": "मुहर्रम", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2026-06-29", "id": "jyeshtha-purnima", "en": "Jyeshtha Purnima / Vat Purnima", "hi": "ज्येष्ठ पूर्णिमा", "type": "vrat", "note": "Vat Purnima observed in Maharashtra/Gujarat"}, {"date": "2026-07-16", "id": "rath-yatra", "en": "Jagannath Rath Yatra", "hi": "जगन्नाथ रथ यात्रा", "type": "major"}, {"date": "2026-07-25", "id": "devshayani-ekadashi", "en": "Devshayani Ekadashi", "hi": "देवशयनी एकादशी", "type": "vrat", "note": "Chaturmas begins"}, {"date": "2026-07-29", "id": "guru-purnima", "en": "Guru Purnima", "hi": "गुरु पूर्णिमा", "type": "major"}, {"date": "2026-08-15", "id": "independence-day", "en": "Independence Day", "hi": "स्वतंत्रता दिवस", "type": "national"}, {"date": "2026-08-15", "id": "hariyali-teej", "en": "Hariyali Teej", "hi": "हरियाली तीज", "type": "vrat"}, {"date": "2026-08-17", "id": "nag-panchami", "en": "Nag Panchami", "hi": "नाग पंचमी", "type": "vrat"}, {"date": "2026-08-26", "id": "onam", "en": "Onam", "hi": "ओणम", "type": "regional", "note": "Kerala, Thiruvonam"}, {"date": "2026-08-26", "id": "milad-un-nabi", "en": "Milad-un-Nabi", "hi": "मिलाद-उन-नबी", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2026-08-28", "id": "raksha-bandhan", "en": "Raksha Bandhan", "hi": "रक्षा बंधन", "type": "major", "note": "Shravana Purnima"}, {"date": "2026-08-31", "id": "kajari-teej", "en": "Kajari Teej", "hi": "कजरी तीज", "type": "vrat"}, {"date": "2026-09-04", "id": "janmashtami", "en": "Krishna Janmashtami", "hi": "कृष्ण जन्माष्टमी", "type": "major"}, {"date": "2026-09-14", "id": "ganesh-chaturthi", "en": "Ganesh Chaturthi", "hi": "गणेश चतुर्थी", "type": "major"}, {"date": "2026-09-14", "id": "hartalika-teej", "en": "Hartalika Teej", "hi": "हरतालिका तीज", "type": "vrat"}, {"date": "2026-09-25", "id": "anant-chaturdashi", "en": "Anant Chaturdashi", "hi": "अनंत चतुर्दशी", "type": "major", "note": "Ganesh Visarjan"}, {"date": "2026-09-27", "id": "pitru-paksha-start", "en": "Pitru Paksha begins", "hi": "पितृ पक्ष प्रारंभ", "type": "vrat"}, {"date": "2026-10-02", "id": "gandhi-jayanti", "en": "Gandhi Jayanti", "hi": "गांधी जयंती", "type": "national"}, {"date": "2026-10-10", "id": "sarva-pitru-amavasya", "en": "Sarva Pitru Amavasya", "hi": "सर्व पितृ अमावस्या", "type": "vrat", "note": "Pitru Paksha ends"}, {"date": "2026-10-11", "id": "sharad-navratri-start", "en": "Sharad Navratri begins", "hi": "शारदीय नवरात्रि प्रारंभ", "type": "major", "note": "Ghatasthapana"}, {"date": "2026-10-19", "id": "durga-ashtami", "en": "Durga Ashtami", "hi": "दुर्गा अष्टमी", "type": "major", "note": "Ashtami and Navami on same day per Drik"}, {"date": "2026-10-19", "id": "maha-navami", "en": "Maha Navami", "hi": "महा नवमी", "type": "major", "note": "same day as Durga Ashtami per Drik"}, {"date": "2026-10-20", "id": "dussehra", "en": "Dussehra (Vijayadashami)", "hi": "दशहरा (विजयादशमी)", "type": "major"}, {"date": "2026-10-25", "id": "sharad-purnima", "en": "Sharad Purnima", "hi": "शरद पूर्णिमा", "type": "major", "note": "Kojagara Puja; Ashwina Purnima vrat 2026-10-26"}, {"date": "2026-10-29", "id": "karwa-chauth", "en": "Karwa Chauth", "hi": "करवा चौथ", "type": "vrat"}, {"date": "2026-11-01", "id": "ahoi-ashtami", "en": "Ahoi Ashtami", "hi": "अहोई अष्टमी", "type": "vrat"}, {"date": "2026-11-06", "id": "dhanteras", "en": "Dhanteras", "hi": "धनतेरस", "type": "major"}, {"date": "2026-11-07", "id": "choti-diwali", "en": "Choti Diwali / Narak Chaturdashi", "hi": "छोटी दिवाली / नरक चतुर्दशी", "type": "major", "note": "Drik lists Kali Chaudas on Nov 7 and Narak Chaturdashi (Abhyang Snan) on Nov 8 with Diwali - uncertain"}, {"date": "2026-11-08", "id": "diwali", "en": "Diwali (Lakshmi Puja)", "hi": "दीपावली (लक्ष्मी पूजा)", "type": "major"}, {"date": "2026-11-10", "id": "govardhan-puja", "en": "Govardhan Puja", "hi": "गोवर्धन पूजा", "type": "major", "note": "gap day on Nov 9"}, {"date": "2026-11-11", "id": "bhai-dooj", "en": "Bhai Dooj", "hi": "भाई दूज", "type": "major"}, {"date": "2026-11-14", "id": "childrens-day", "en": "Children's Day", "hi": "बाल दिवस", "type": "national"}, {"date": "2026-11-15", "id": "chhath-puja", "en": "Chhath Puja", "hi": "छठ पूजा", "type": "regional", "note": "Sandhya Arghya; Bihar/UP"}, {"date": "2026-11-20", "id": "dev-uthani-ekadashi", "en": "Dev Uthani Ekadashi", "hi": "देवउठनी एकादशी", "type": "vrat"}, {"date": "2026-11-21", "id": "tulsi-vivah", "en": "Tulsi Vivah", "hi": "तुलसी विवाह", "type": "vrat"}, {"date": "2026-11-24", "id": "kartik-purnima", "en": "Kartik Purnima", "hi": "कार्तिक पूर्णिमा", "type": "major", "note": "Dev Deepawali"}, {"date": "2026-11-24", "id": "guru-nanak-jayanti", "en": "Guru Nanak Jayanti", "hi": "गुरु नानक जयंती", "type": "jayanti"}, {"date": "2026-11-24", "id": "guru-tegh-bahadur-martyrdom", "en": "Guru Tegh Bahadur Martyrdom Day", "hi": "गुरु तेग बहादुर शहीदी दिवस", "type": "regional", "note": "Restricted holiday list"}, {"date": "2026-12-14", "id": "vivah-panchami", "en": "Vivah Panchami", "hi": "विवाह पंचमी", "type": "vrat"}, {"date": "2026-12-20", "id": "gita-jayanti", "en": "Gita Jayanti / Mokshada Ekadashi", "hi": "गीता जयंती / मोक्षदा एकादशी", "type": "jayanti"}, {"date": "2026-12-23", "id": "dattatreya-jayanti", "en": "Dattatreya Jayanti", "hi": "दत्तात्रेय जयंती", "type": "jayanti", "note": "Margashirsha Purnima"}, {"date": "2026-12-25", "id": "christmas", "en": "Christmas", "hi": "क्रिसमस", "type": "major"}, {"date": "2027-01-14", "id": "lohri", "en": "Lohri", "hi": "लोहड़ी", "type": "regional", "note": "eve of Makar Sankranti; not cross-checked"}, {"date": "2027-01-15", "id": "makar-sankranti", "en": "Makar Sankranti", "hi": "मकर संक्रांति", "type": "major", "note": "Drik (Punya Kaal) Jan 15; DoPT restricted list gives Jan 14 - uncertain"}, {"date": "2027-01-15", "id": "pongal", "en": "Pongal", "hi": "पोंगल", "type": "regional"}, {"date": "2027-01-15", "id": "guru-gobind-singh-jayanti", "en": "Guru Gobind Singh Jayanti", "hi": "गुरु गोबिंद सिंह जयंती", "type": "jayanti", "note": "Paush Shukla Saptami; Drik + DoPT RH agree. No occurrence in calendar 2026 (previous was 2025-12-27)"}, {"date": "2027-01-22", "id": "pausha-purnima", "en": "Pausha Purnima", "hi": "पौष पूर्णिमा", "type": "vrat"}, {"date": "2027-01-25", "id": "sakat-chauth", "en": "Sakat Chauth", "hi": "सकट चौथ", "type": "vrat"}, {"date": "2027-01-26", "id": "republic-day", "en": "Republic Day", "hi": "गणतंत्र दिवस", "type": "national"}, {"date": "2027-02-02", "id": "shattila-ekadashi", "en": "Shattila Ekadashi", "hi": "षटतिला एकादशी", "type": "vrat"}, {"date": "2027-02-06", "id": "mauni-amavasya", "en": "Mauni Amavasya", "hi": "मौनी अमावस्या", "type": "vrat"}, {"date": "2027-02-11", "id": "vasant-panchami", "en": "Vasant Panchami", "hi": "वसंत पंचमी", "type": "major"}, {"date": "2027-02-20", "id": "magha-purnima", "en": "Magha Purnima", "hi": "माघ पूर्णिमा", "type": "vrat"}, {"date": "2027-02-20", "id": "ravidas-jayanti", "en": "Guru Ravidas Jayanti", "hi": "गुरु रविदास जयंती", "type": "jayanti"}, {"date": "2027-03-06", "id": "maha-shivaratri", "en": "Maha Shivaratri", "hi": "महा शिवरात्रि", "type": "major"}, {"date": "2027-03-10", "id": "eid-al-fitr", "en": "Eid al-Fitr", "hi": "ईद-उल-फ़ित्र", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2027-03-21", "id": "holika-dahan", "en": "Holika Dahan", "hi": "होलिका दहन", "type": "major", "note": "Drik/dekhopanchang Mar 21; DoPT RH list gives Mar 22 - uncertain"}, {"date": "2027-03-22", "id": "holi", "en": "Holi", "hi": "होली", "type": "major", "note": "Drik Mar 22; DoPT gazetted holiday is Mar 23 - uncertain"}, {"date": "2027-03-26", "id": "good-friday", "en": "Good Friday", "hi": "गुड फ्राइडे", "type": "major"}, {"date": "2027-03-28", "id": "easter", "en": "Easter", "hi": "ईस्टर", "type": "major"}, {"date": "2027-04-07", "id": "chaitra-navratri-start", "en": "Chaitra Navratri begins", "hi": "चैत्र नवरात्रि प्रारंभ", "type": "major", "note": "Hindu New Year, Vikram Samvat 2084"}, {"date": "2027-04-07", "id": "gudi-padwa-ugadi", "en": "Gudi Padwa / Ugadi", "hi": "गुड़ी पड़वा / उगादि", "type": "regional"}, {"date": "2027-04-14", "id": "baisakhi", "en": "Baisakhi", "hi": "बैसाखी", "type": "regional"}, {"date": "2027-04-14", "id": "ambedkar-jayanti", "en": "Ambedkar Jayanti", "hi": "अम्बेडकर जयंती", "type": "national"}, {"date": "2027-04-15", "id": "ram-navami", "en": "Ram Navami", "hi": "राम नवमी", "type": "major"}, {"date": "2027-04-19", "id": "mahavir-jayanti", "en": "Mahavir Jayanti", "hi": "महावीर जयंती", "type": "jayanti"}, {"date": "2027-04-20", "id": "hanuman-jayanti", "en": "Hanuman Jayanti", "hi": "हनुमान जयंती", "type": "jayanti"}, {"date": "2027-05-08", "id": "parashurama-jayanti", "en": "Parashurama Jayanti", "hi": "परशुराम जयंती", "type": "jayanti"}, {"date": "2027-05-09", "id": "akshaya-tritiya", "en": "Akshaya Tritiya", "hi": "अक्षय तृतीया", "type": "major"}, {"date": "2027-05-17", "id": "eid-al-adha", "en": "Eid al-Adha (Bakrid)", "hi": "ईद-उल-अज़हा (बकरीद)", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2027-05-20", "id": "buddha-purnima", "en": "Buddha Purnima", "hi": "बुद्ध पूर्णिमा", "type": "major"}, {"date": "2027-06-04", "id": "vat-savitri", "en": "Vat Savitri Vrat", "hi": "वट सावित्री व्रत", "type": "vrat"}, {"date": "2027-06-04", "id": "shani-jayanti", "en": "Shani Jayanti", "hi": "शनि जयंती", "type": "jayanti"}, {"date": "2027-06-13", "id": "ganga-dussehra", "en": "Ganga Dussehra", "hi": "गंगा दशहरा", "type": "major"}, {"date": "2027-06-14", "id": "nirjala-ekadashi", "en": "Nirjala Ekadashi", "hi": "निर्जला एकादशी", "type": "vrat"}, {"date": "2027-06-16", "id": "muharram", "en": "Muharram (Ashura)", "hi": "मुहर्रम", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2027-06-18", "id": "jyeshtha-purnima", "en": "Jyeshtha Purnima / Vat Purnima", "hi": "ज्येष्ठ पूर्णिमा", "type": "vrat"}, {"date": "2027-07-05", "id": "rath-yatra", "en": "Jagannath Rath Yatra", "hi": "जगन्नाथ रथ यात्रा", "type": "major"}, {"date": "2027-07-14", "id": "devshayani-ekadashi", "en": "Devshayani Ekadashi", "hi": "देवशयनी एकादशी", "type": "vrat"}, {"date": "2027-07-18", "id": "guru-purnima", "en": "Guru Purnima", "hi": "गुरु पूर्णिमा", "type": "major"}, {"date": "2027-08-04", "id": "hariyali-teej", "en": "Hariyali Teej", "hi": "हरियाली तीज", "type": "vrat"}, {"date": "2027-08-06", "id": "nag-panchami", "en": "Nag Panchami", "hi": "नाग पंचमी", "type": "vrat"}, {"date": "2027-08-15", "id": "independence-day", "en": "Independence Day", "hi": "स्वतंत्रता दिवस", "type": "national"}, {"date": "2027-08-15", "id": "milad-un-nabi", "en": "Milad-un-Nabi", "hi": "मिलाद-उन-नबी", "type": "major", "note": "Islamic; subject to moon sighting"}, {"date": "2027-08-17", "id": "raksha-bandhan", "en": "Raksha Bandhan", "hi": "रक्षा बंधन", "type": "major"}, {"date": "2027-08-20", "id": "kajari-teej", "en": "Kajari Teej", "hi": "कजरी तीज", "type": "vrat"}, {"date": "2027-08-25", "id": "janmashtami", "en": "Krishna Janmashtami", "hi": "कृष्ण जन्माष्टमी", "type": "major"}, {"date": "2027-09-03", "id": "hartalika-teej", "en": "Hartalika Teej", "hi": "हरतालिका तीज", "type": "vrat"}, {"date": "2027-09-04", "id": "ganesh-chaturthi", "en": "Ganesh Chaturthi", "hi": "गणेश चतुर्थी", "type": "major"}, {"date": "2027-09-12", "id": "onam", "en": "Onam", "hi": "ओणम", "type": "regional"}, {"date": "2027-09-14", "id": "anant-chaturdashi", "en": "Anant Chaturdashi", "hi": "अनंत चतुर्दशी", "type": "major", "note": "Ganesh Visarjan"}, {"date": "2027-09-16", "id": "pitru-paksha-start", "en": "Pitru Paksha begins", "hi": "पितृ पक्ष प्रारंभ", "type": "vrat"}, {"date": "2027-09-29", "id": "sarva-pitru-amavasya", "en": "Sarva Pitru Amavasya", "hi": "सर्व पितृ अमावस्या", "type": "vrat"}, {"date": "2027-09-30", "id": "sharad-navratri-start", "en": "Sharad Navratri begins", "hi": "शारदीय नवरात्रि प्रारंभ", "type": "major"}, {"date": "2027-10-02", "id": "gandhi-jayanti", "en": "Gandhi Jayanti", "hi": "गांधी जयंती", "type": "national"}, {"date": "2027-10-07", "id": "durga-ashtami", "en": "Durga Ashtami", "hi": "दुर्गा अष्टमी", "type": "major"}, {"date": "2027-10-08", "id": "maha-navami", "en": "Maha Navami", "hi": "महा नवमी", "type": "major"}, {"date": "2027-10-09", "id": "dussehra", "en": "Dussehra (Vijayadashami)", "hi": "दशहरा (विजयादशमी)", "type": "major"}, {"date": "2027-10-14", "id": "sharad-purnima", "en": "Sharad Purnima", "hi": "शरद पूर्णिमा", "type": "major"}, {"date": "2027-10-18", "id": "karwa-chauth", "en": "Karwa Chauth", "hi": "करवा चौथ", "type": "vrat"}, {"date": "2027-10-22", "id": "ahoi-ashtami", "en": "Ahoi Ashtami", "hi": "अहोई अष्टमी", "type": "vrat"}, {"date": "2027-10-27", "id": "dhanteras", "en": "Dhanteras", "hi": "धनतेरस", "type": "major"}, {"date": "2027-10-28", "id": "choti-diwali", "en": "Choti Diwali / Narak Chaturdashi", "hi": "छोटी दिवाली / नरक चतुर्दशी", "type": "major"}, {"date": "2027-10-29", "id": "diwali", "en": "Diwali (Lakshmi Puja)", "hi": "दीपावली (लक्ष्मी पूजा)", "type": "major"}, {"date": "2027-10-30", "id": "govardhan-puja", "en": "Govardhan Puja", "hi": "गोवर्धन पूजा", "type": "major"}, {"date": "2027-10-31", "id": "bhai-dooj", "en": "Bhai Dooj", "hi": "भाई दूज", "type": "major"}, {"date": "2027-11-04", "id": "chhath-puja", "en": "Chhath Puja", "hi": "छठ पूजा", "type": "regional", "note": "Sandhya Arghya"}, {"date": "2027-11-10", "id": "dev-uthani-ekadashi", "en": "Dev Uthani Ekadashi", "hi": "देवउठनी एकादशी", "type": "vrat"}, {"date": "2027-11-11", "id": "tulsi-vivah", "en": "Tulsi Vivah", "hi": "तुलसी विवाह", "type": "vrat"}, {"date": "2027-11-14", "id": "kartik-purnima", "en": "Kartik Purnima", "hi": "कार्तिक पूर्णिमा", "type": "major"}, {"date": "2027-11-14", "id": "guru-nanak-jayanti", "en": "Guru Nanak Jayanti", "hi": "गुरु नानक जयंती", "type": "jayanti"}, {"date": "2027-11-14", "id": "childrens-day", "en": "Children's Day", "hi": "बाल दिवस", "type": "national"}, {"date": "2027-11-24", "id": "guru-tegh-bahadur-martyrdom", "en": "Guru Tegh Bahadur Martyrdom Day", "hi": "गुरु तेग बहादुर शहीदी दिवस", "type": "regional"}, {"date": "2027-12-03", "id": "vivah-panchami", "en": "Vivah Panchami", "hi": "विवाह पंचमी", "type": "vrat"}, {"date": "2027-12-09", "id": "gita-jayanti", "en": "Gita Jayanti / Mokshada Ekadashi", "hi": "गीता जयंती / मोक्षदा एकादशी", "type": "jayanti"}, {"date": "2027-12-13", "id": "dattatreya-jayanti", "en": "Dattatreya Jayanti", "hi": "दत्तात्रेय जयंती", "type": "jayanti"}, {"date": "2027-12-25", "id": "christmas", "en": "Christmas", "hi": "क्रिसमस", "type": "major"}]};
+const I=(icon,story,how,food)=>({icon,story,how,food});
+const INFO={
+'lohri':I('🔥',b('A Punjabi winter festival marking the end of the coldest days and the harvest of sugarcane. It is linked with the folk hero Dulla Bhatti, who helped poor girls.','पंजाब का शीतकालीन त्योहार, जो कड़ाके की ठंड के अंत और गन्ने की फ़सल का प्रतीक है। इसे लोकनायक दुल्ला भट्टी से जोड़ा जाता है, जिन्होंने ग़रीब लड़कियों की मदद की।'),b('A bonfire is lit in the evening; people throw rewri, peanuts and popcorn into it, sing and dance bhangra and giddha.','शाम को अलाव जलाया जाता है; लोग उसमें रेवड़ी, मूँगफली और पॉपकॉर्न डालते हैं, गीत गाते हैं और भांगड़ा-गिद्दा करते हैं।'),b('Rewri, gajak, til laddoo, makki di roti and sarson da saag.','रेवड़ी, गजक, तिल के लड्डू, मक्की की रोटी और सरसों का साग।')),
+'makar-sankranti':I('🪁',b('The day the Sun enters Makara (Capricorn) rashi and begins its northward journey (Uttarayana). It is one of the few festivals fixed by the Sun, not the Moon.','वह दिन जब सूर्य मकर राशि में प्रवेश करता है और उत्तरायण की यात्रा शुरू करता है। यह उन कुछ त्योहारों में है जो चंद्रमा नहीं, सूर्य से तय होते हैं।'),b('Holy dips in rivers, donating sesame and jaggery, and flying kites — especially in Gujarat and Rajasthan.','नदियों में पवित्र स्नान, तिल-गुड़ का दान और पतंगबाज़ी — ख़ासकर गुजरात और राजस्थान में।'),b('Til-gud laddoo, khichdi, chikki and undhiyu.','तिल-गुड़ के लड्डू, खिचड़ी, चिक्की और उंधियू।')),
+'pongal':I('🍚',b('A four-day Tamil harvest festival thanking the Sun, cattle and nature for a good crop.','चार दिन का तमिल फ़सल उत्सव, जिसमें अच्छी फ़सल के लिए सूर्य, पशुओं और प्रकृति को धन्यवाद दिया जाता है।'),b('New rice is boiled with milk and jaggery until it overflows — "Pongalo Pongal!" Homes are decorated with kolam.','नए चावल को दूध और गुड़ में तब तक उबाला जाता है जब तक वह उफन न जाए — "पोंगलो पोंगल!" घरों में कोलम बनाए जाते हैं।'),b('Sakkarai pongal, ven pongal, sugarcane.','सक्करई पोंगल, वेन पोंगल, गन्ना।')),
+'vasant-panchami':I('🌼',b('Celebrates the arrival of spring and Goddess Saraswati, the goddess of knowledge, music and arts.','वसंत ऋतु के आगमन और ज्ञान, संगीत व कला की देवी सरस्वती का उत्सव।'),b('People wear yellow, worship books and instruments, and little children often write their first letters (Vidyarambh).','लोग पीले कपड़े पहनते हैं, किताबों और वाद्य यंत्रों की पूजा करते हैं, और छोटे बच्चे अक्सर पहली बार अक्षर लिखते हैं (विद्यारंभ)।'),b('Kesari (saffron) rice, boondi, yellow sweets.','केसरिया भात, बूंदी, पीली मिठाइयाँ।')),
+'maha-shivaratri':I('🔱',b('The great night of Lord Shiva — remembered as the night of Shiva\'s cosmic dance and his marriage to Parvati.','भगवान शिव की महान रात्रि — शिव के तांडव और शिव-पार्वती विवाह की रात के रूप में याद की जाती है।'),b('Devotees fast, offer water, milk and bel leaves on the Shivling, and stay awake chanting "Om Namah Shivaya".','भक्त उपवास रखते हैं, शिवलिंग पर जल, दूध और बेलपत्र चढ़ाते हैं और "ॐ नमः शिवाय" जपते हुए रात भर जागते हैं।'),b('Fasting foods: sabudana khichdi, fruits, thandai.','व्रत का भोजन: साबूदाना खिचड़ी, फल, ठंडाई।')),
+'holika-dahan':I('🔥',b('Remembers how young Prahlad, a devotee of Vishnu, was saved from the fire while the demoness Holika burned — good wins over evil.','विष्णु भक्त प्रह्लाद की रक्षा और होलिका के जल जाने की याद — बुराई पर अच्छाई की जीत।'),b('A bonfire is lit after sunset at the right muhurat (avoiding Bhadra); people circle it and offer new grain.','सूर्यास्त के बाद शुभ मुहूर्त (भद्रा छोड़कर) में होलिका जलाई जाती है; लोग परिक्रमा करते हैं और नया अनाज अर्पित करते हैं।'),b('Gujiya, roasted wheat and gram ears.','गुझिया, भुने गेहूँ और चने की बालियाँ।')),
+'holi':I('🎨',b('The festival of colours celebrates spring, love (Radha–Krishna) and the victory of good over evil.','रंगों का त्योहार वसंत, प्रेम (राधा-कृष्ण) और बुराई पर अच्छाई की जीत का उत्सव है।'),b('People play with gulal and coloured water, visit friends, forgive old quarrels and sing Holi songs.','लोग गुलाल और रंगीन पानी से खेलते हैं, दोस्तों से मिलते हैं, पुराने गिले-शिकवे भूलते हैं और फाग गाते हैं।'),b('Gujiya, thandai, dahi bhalla, malpua.','गुझिया, ठंडाई, दही भल्ले, मालपुए।')),
+'chaitra-navratri-start':I('🌸',b('Nine nights of Goddess Durga in spring; the Hindu (Vikram Samvat) new year begins on the first day.','वसंत में माँ दुर्गा की नौ रातें; पहले दिन हिंदू नववर्ष (विक्रम संवत) शुरू होता है।'),b('Ghatasthapana (pot installation) on day 1, fasting, and worship of a different form of Durga each day.','पहले दिन घटस्थापना, उपवास, और हर दिन दुर्गा के अलग रूप की पूजा।'),b('Kuttu puri, sabudana, fruit chaat, halwa-chana on Ashtami/Navami.','कुट्टू की पूरी, साबूदाना, फलाहार, अष्टमी/नवमी पर हलवा-चना।')),
+'gudi-padwa-ugadi':I('🎋',b('New Year for Maharashtra (Gudi Padwa) and Karnataka, Andhra and Telangana (Ugadi), on Chaitra Shukla Pratipada.','चैत्र शुक्ल प्रतिपदा पर महाराष्ट्र (गुड़ी पड़वा) और कर्नाटक, आंध्र, तेलंगाना (उगादी) का नववर्ष।'),b('A gudi (decorated pole with cloth and a pot) is raised; rangoli is drawn; people taste a mix of six flavours for a balanced year.','गुड़ी (कपड़े और कलश से सजा डंडा) फहराई जाती है; रंगोली बनती है; पूरे साल के संतुलन के लिए छह स्वादों का मिश्रण चखा जाता है।'),b('Puran poli, Ugadi pachadi, shrikhand.','पूरन पोली, उगादी पचड़ी, श्रीखंड।')),
+'ram-navami':I('🏹',b('The birthday of Lord Rama, born at noon on Chaitra Shukla Navami in Ayodhya.','भगवान राम का जन्मदिन, जो अयोध्या में चैत्र शुक्ल नवमी को दोपहर में जन्मे।'),b('Midday puja, reading the Ramayana, processions and kanya pujan to end Navratri.','दोपहर की पूजा, रामायण पाठ, शोभायात्राएँ और नवरात्रि के समापन पर कन्या पूजन।'),b('Panakam, kosambari, halwa-puri-chana.','पानकम, कोसंबरी, हलवा-पूरी-चना।')),
+'mahavir-jayanti':I('🕊️',b('Birth anniversary of Bhagwan Mahavir, the 24th Jain Tirthankara, who taught non-violence and truth.','24वें जैन तीर्थंकर भगवान महावीर की जयंती, जिन्होंने अहिंसा और सत्य का उपदेश दिया।'),b('Processions with his idol, charity, and prayers in Jain temples.','उनकी प्रतिमा की शोभायात्रा, दान और जैन मंदिरों में प्रार्थना।'),null),
+'hanuman-jayanti':I('🐒',b('Birthday of Lord Hanuman, the mighty devotee of Rama, celebrated on Chaitra Purnima in North India.','राम के परम भक्त हनुमान जी का जन्मोत्सव, उत्तर भारत में चैत्र पूर्णिमा को।'),b('Reciting Hanuman Chalisa and Sundar Kand, offering sindoor and boondi at temples.','हनुमान चालीसा और सुंदरकांड का पाठ, मंदिरों में सिंदूर और बूंदी चढ़ाना।'),b('Boondi laddoo, besan laddoo.','बूंदी के लड्डू, बेसन के लड्डू।')),
+'baisakhi':I('🌾',b('Punjab\'s harvest festival and the day Guru Gobind Singh founded the Khalsa in 1699.','पंजाब का फ़सल उत्सव और वह दिन जब 1699 में गुरु गोबिंद सिंह जी ने ख़ालसा पंथ की स्थापना की।'),b('Gurdwara visits, nagar kirtan, fairs, bhangra and giddha.','गुरुद्वारे जाना, नगर कीर्तन, मेले, भांगड़ा और गिद्दा।'),b('Kada prasad, meethe chawal, chole bhature.','कड़ा प्रसाद, मीठे चावल, छोले भटूरे।')),
+'akshaya-tritiya':I('💰',b('"Akshaya" means never-ending: good deeds and purchases on this day are believed to bring lasting blessings. Parashurama was born on this day.','"अक्षय" यानी कभी न ख़त्म होने वाला: इस दिन किए गए शुभ काम और ख़रीदारी स्थायी फल देते हैं। इसी दिन परशुराम का जन्म हुआ।'),b('Buying gold, starting new ventures, charity of water pots and fans, worship of Vishnu and Lakshmi.','सोना ख़रीदना, नए काम शुरू करना, जल से भरे घड़े और पंखे दान करना, विष्णु-लक्ष्मी पूजा।'),null),
+'parashurama-jayanti':I('🪓',b('Birthday of Parashurama, the sixth avatar of Vishnu, known for his axe and devotion to his father.','विष्णु के छठे अवतार परशुराम का जन्मदिन, जो अपने फरसे और पितृभक्ति के लिए प्रसिद्ध हैं।'),b('Prayers and processions, especially in Brahmin communities.','पूजा और शोभायात्राएँ।'),null),
+'buddha-purnima':I('☸️',b('Marks the birth, enlightenment and passing of Gautama Buddha — all on Vaishakha Purnima.','गौतम बुद्ध के जन्म, ज्ञान-प्राप्ति और महापरिनिर्वाण का दिन — तीनों वैशाख पूर्णिमा को।'),b('Prayers at monasteries, lighting lamps, kindness to animals and charity.','मठों में प्रार्थना, दीप जलाना, जीवों पर दया और दान।'),b('Kheer (as Sujata offered the Buddha).','खीर (जैसे सुजाता ने बुद्ध को दी थी)।')),
+'vat-savitri':I('🌳',b('Remembers Savitri, who by her wisdom and devotion won back her husband Satyavan\'s life from Yama.','सावित्री की याद, जिन्होंने अपनी बुद्धि और निष्ठा से यमराज से पति सत्यवान के प्राण वापस पाए।'),b('Married women fast and tie threads around a banyan (vat) tree while circling it.','विवाहित महिलाएँ व्रत रखती हैं और बरगद के पेड़ की परिक्रमा कर धागा बाँधती हैं।'),b('Soaked chana, puri, mango.','भीगे चने, पूरी, आम।')),
+'shani-jayanti':I('🪐',b('Birthday of Shani Dev (Saturn), son of Surya, on Jyeshtha Amavasya.','सूर्यपुत्र शनि देव का जन्मदिन, ज्येष्ठ अमावस्या को।'),b('Offering mustard oil and black sesame at Shani temples; charity to the poor.','शनि मंदिरों में सरसों का तेल और काले तिल चढ़ाना; ग़रीबों को दान।'),null),
+'adhik-maas-start':I('➕',b('An extra lunar month added roughly every 3 years so the lunar calendar stays in step with the seasons. 2026 has Adhik Jyeshtha.','चंद्र पंचांग को ऋतुओं के साथ बनाए रखने के लिए लगभग हर 3 साल में जुड़ने वाला अतिरिक्त महीना। 2026 में अधिक ज्येष्ठ है।'),b('Called Purushottam Maas; devoted to Vishnu. Weddings and new beginnings are usually avoided; prayer and charity are encouraged.','इसे पुरुषोत्तम मास कहते हैं; यह विष्णु को समर्पित है। विवाह और नए काम टाले जाते हैं; पूजा और दान को बढ़ावा।'),null),
+'ganga-dussehra':I('🌊',b('Celebrates the descent of the river Ganga from heaven to earth, brought down by King Bhagiratha.','राजा भगीरथ के तप से गंगा के स्वर्ग से पृथ्वी पर अवतरण का उत्सव।'),b('Holy dips in the Ganga, Ganga aarti and donating ten items.','गंगा स्नान, गंगा आरती और दस वस्तुओं का दान।'),null),
+'nirjala-ekadashi':I('💧',b('The strictest Ekadashi — fasting without even water. Bhima is said to have kept it to gain the merit of all 24 Ekadashis.','सबसे कठिन एकादशी — बिना पानी का व्रत। माना जाता है कि भीम ने सभी 24 एकादशियों का फल पाने के लिए इसे रखा।'),b('Full fast without water from sunrise to next sunrise; donating water pots and fans.','सूर्योदय से अगले सूर्योदय तक बिना पानी का व्रत; जल से भरे घड़े और पंखे दान।'),null),
+'rath-yatra':I('🛕',b('Lord Jagannath, with Balabhadra and Subhadra, rides huge chariots from the Puri temple to Gundicha temple.','भगवान जगन्नाथ, बलभद्र और सुभद्रा के साथ विशाल रथों में पुरी मंदिर से गुंडिचा मंदिर जाते हैं।'),b('Thousands pull the chariots with ropes; processions happen in many cities.','हज़ारों भक्त रस्सियों से रथ खींचते हैं; कई शहरों में यात्राएँ निकलती हैं।'),b('Mahaprasad, khaja, poda pitha.','महाप्रसाद, खाजा, पोड़ा पीठा।')),
+'devshayani-ekadashi':I('😴',b('Vishnu is believed to go into cosmic sleep for four months (Chaturmas) from this day.','मान्यता है कि इस दिन से भगवान विष्णु चार महीने (चातुर्मास) के लिए योगनिद्रा में जाते हैं।'),b('Fasting and Vishnu puja; the Pandharpur wari in Maharashtra ends on this day.','व्रत और विष्णु पूजा; महाराष्ट्र की पंढरपुर वारी इसी दिन पूरी होती है।'),null),
+'guru-purnima':I('🙏',b('A day to honour teachers; it is also the birthday of sage Ved Vyasa, who compiled the Vedas and wrote the Mahabharata.','गुरुओं के सम्मान का दिन; यह वेदव्यास जी का जन्मदिन भी है जिन्होंने वेदों का संकलन और महाभारत की रचना की।'),b('Students thank and touch the feet of their teachers; spiritual gatherings.','शिष्य गुरुओं को धन्यवाद देते हैं और चरण स्पर्श करते हैं; सत्संग।'),null),
+'hariyali-teej':I('🌿',b('A monsoon festival celebrating the reunion of Shiva and Parvati after her long penance.','मानसून का त्योहार, जो पार्वती के लंबे तप के बाद शिव-पार्वती के मिलन का उत्सव है।'),b('Women wear green, apply mehndi, swing on decorated jhoolas and sing Teej songs.','महिलाएँ हरे कपड़े पहनती हैं, मेहंदी लगाती हैं, झूला झूलती हैं और तीज के गीत गाती हैं।'),b('Ghevar, malpua, kheer.','घेवर, मालपुआ, खीर।')),
+'kajari-teej':I('🌧️',b('A monsoon Teej in Bhadrapada, named after kajari folk songs of the rains.','भाद्रपद की तीज, जिसका नाम बारिश के कजरी लोकगीतों पर पड़ा।'),b('Women fast for their family\'s well-being and worship the neem tree and Goddess Parvati.','महिलाएँ परिवार की खुशहाली के लिए व्रत रखती हैं और नीम व माँ पार्वती की पूजा करती हैं।'),b('Sattu laddoo.','सत्तू के लड्डू।')),
+'hartalika-teej':I('💚',b('Remembers how Parvati\'s friends took her to the forest so she could do penance to marry Shiva.','याद दिलाती है कि पार्वती की सखियाँ उन्हें वन ले गईं ताकि वे शिव से विवाह के लिए तप कर सकें।'),b('A strict fast by women, clay idols of Shiva-Parvati, and night-long prayers.','महिलाओं का कठिन व्रत, शिव-पार्वती की मिट्टी की मूर्तियाँ और रात भर पूजा।'),null),
+'nag-panchami':I('🐍',b('A day to honour snakes (Nag Devta), remembering their place in nature and in stories like Krishna and Kaliya.','नाग देवता के सम्मान का दिन, प्रकृति में उनकी जगह और कृष्ण-कालिया जैसी कथाओं की याद।'),b('People draw snake images and offer milk and flowers at snake shrines; digging the soil is avoided.','लोग नाग के चित्र बनाते हैं और नाग देवता को दूध व फूल चढ़ाते हैं; ज़मीन खोदने से बचा जाता है।'),null),
+'onam':I('🌺',b('Kerala\'s harvest festival welcoming the beloved King Mahabali, who visits his people every year.','केरल का फ़सल उत्सव, जिसमें प्रिय राजा महाबली का स्वागत होता है जो हर साल अपनी प्रजा से मिलने आते हैं।'),b('Pookalam flower carpets, snake-boat races, Kathakali and Thiruvathira dances.','फूलों की पूकलम, नौका दौड़, कथकली और तिरुवातिरा नृत्य।'),b('Onam sadya — a feast of 20+ dishes on a banana leaf, payasam.','ओणम सद्या — केले के पत्ते पर 20 से ज़्यादा व्यंजन, पायसम।')),
+'raksha-bandhan':I('🎀',b('Celebrates the bond of brothers and sisters. Stories include Krishna and Draupadi, and Yama and Yamuna.','भाई-बहन के रिश्ते का उत्सव। कथाओं में कृष्ण-द्रौपदी और यम-यमुना शामिल हैं।'),b('Sisters tie a rakhi on their brother\'s wrist (avoiding Bhadra time); brothers promise to protect them and give gifts.','बहनें भाई की कलाई पर राखी बाँधती हैं (भद्रा काल छोड़कर); भाई रक्षा का वचन और उपहार देते हैं।'),b('Ghevar, kaju katli, coconut laddoo.','घेवर, काजू कतली, नारियल के लड्डू।')),
+'janmashtami':I('🦚',b('Birthday of Lord Krishna, born at midnight in a Mathura prison on Bhadrapada Krishna Ashtami.','भगवान कृष्ण का जन्मदिन, जो भाद्रपद कृष्ण अष्टमी की आधी रात को मथुरा के कारागार में जन्मे।'),b('Fasting until midnight, jhankis, swinging baby Krishna\'s cradle and Dahi Handi the next day.','आधी रात तक व्रत, झाँकियाँ, बाल गोपाल का झूला और अगले दिन दही हांडी।'),b('Makhan-mishri, panjiri, dhaniya panjiri, panchamrit.','माखन-मिश्री, पंजीरी, धनिया पंजीरी, पंचामृत।')),
+'ganesh-chaturthi':I('🐘',b('Birthday of Lord Ganesha, remover of obstacles. The ten-day public festival was popularised by Lokmanya Tilak.','विघ्नहर्ता गणेश जी का जन्मदिन। दस दिन के सार्वजनिक उत्सव को लोकमान्य तिलक ने लोकप्रिय बनाया।'),b('Ganesha idols are installed at home and in pandals, worshipped for 1–10 days and immersed in water.','घरों और पंडालों में गणेश मूर्ति स्थापित कर 1 से 10 दिन पूजा की जाती है और फिर विसर्जन होता है।'),b('Modak, laddoo, puran poli.','मोदक, लड्डू, पूरन पोली।')),
+'anant-chaturdashi':I('🌊',b('The last day of Ganesh Utsav and a day to worship Vishnu in his Anant (endless) form.','गणेशोत्सव का आख़िरी दिन और विष्णु के अनंत रूप की पूजा का दिन।'),b('Ganesh visarjan processions; tying the 14-knot Anant sutra.','गणेश विसर्जन की शोभायात्राएँ; 14 गाँठों वाला अनंत सूत्र बाँधना।'),null),
+'pitru-paksha-start':I('🕯️',b('A fortnight to remember and thank ancestors (pitrs).','पितरों को याद करने और धन्यवाद देने का पखवाड़ा।'),b('Shraddh and tarpan on the tithi of the ancestor\'s passing; feeding Brahmins, cows, crows and the needy.','पितर की मृत्यु तिथि पर श्राद्ध और तर्पण; ब्राह्मणों, गाय, कौवों और ज़रूरतमंदों को भोजन।'),b('Kheer, puri, simple sattvic food.','खीर, पूरी, सात्विक भोजन।')),
+'sarva-pitru-amavasya':I('🪔',b('The last day of Pitru Paksha, when all ancestors are remembered together.','पितृ पक्ष का अंतिम दिन, जब सभी पितरों को एक साथ याद किया जाता है।'),b('Shraddh for all ancestors, especially those whose date is not known.','सभी पितरों का श्राद्ध, ख़ासकर जिनकी तिथि ज्ञात न हो।'),null),
+'sharad-navratri-start':I('🪷',b('Nine nights of Goddess Durga, who fought the buffalo-demon Mahishasura and won on the tenth day.','माँ दुर्गा की नौ रातें, जिन्होंने महिषासुर से युद्ध कर दसवें दिन विजय पाई।'),b('Ghatasthapana, fasting, garba and dandiya in Gujarat, Durga Puja pandals in Bengal, Ramlila in North India.','घटस्थापना, उपवास, गुजरात में गरबा-डांडिया, बंगाल में दुर्गा पूजा पंडाल, उत्तर भारत में रामलीला।'),b('Kuttu, singhara, sabudana, makhana.','कुट्टू, सिंघाड़ा, साबूदाना, मखाना।')),
+'durga-ashtami':I('🗡️',b('The eighth day of Navratri, dedicated to Goddess Mahagauri.','नवरात्रि का आठवाँ दिन, माँ महागौरी को समर्पित।'),b('Kanya pujan — young girls are worshipped as forms of the Goddess and fed.','कन्या पूजन — छोटी बच्चियों को देवी का रूप मानकर पूजा और भोजन कराया जाता है।'),b('Halwa, puri, black chana.','हलवा, पूरी, काले चने।')),
+'maha-navami':I('🌺',b('The ninth day of Navratri, dedicated to Goddess Siddhidatri.','नवरात्रि का नौवाँ दिन, माँ सिद्धिदात्री को समर्पित।'),b('Kanya pujan, havan and Ayudha puja (worship of tools and books) in the South.','कन्या पूजन, हवन और दक्षिण में आयुध पूजा (औज़ार और किताबों की पूजा)।'),b('Halwa, puri, chana.','हलवा, पूरी, चना।')),
+'dussehra':I('🏹',b('Vijayadashami — Lord Rama defeated Ravana, and Goddess Durga defeated Mahishasura. Good triumphs over evil.','विजयादशमी — भगवान राम ने रावण को और माँ दुर्गा ने महिषासुर को हराया। अच्छाई की बुराई पर जीत।'),b('Ravana effigies are burned after Ramlila; Shami puja; Durga idols are immersed.','रामलीला के बाद रावण दहन; शमी पूजन; दुर्गा प्रतिमा विसर्जन।'),b('Jalebi, fafda.','जलेबी, फाफड़ा।')),
+'sharad-purnima':I('🌕',b('The full moon of Ashwin, said to be the brightest of the year; Krishna\'s Raas Leela with the gopis is remembered.','आश्विन की पूर्णिमा, जिसे साल का सबसे उजला चाँद माना जाता है; गोपियों के साथ कृष्ण की रासलीला की याद।'),b('Kheer is kept under the moonlight overnight and eaten the next morning; night-long celebrations.','खीर को रात भर चाँदनी में रखकर सुबह खाया जाता है; रात भर उत्सव।'),b('Moonlight kheer.','चाँदनी वाली खीर।')),
+'karwa-chauth':I('🌙',b('A fast kept by married women for their husband\'s long life, ended after seeing the moon.','विवाहित महिलाओं का पति की लंबी उम्र के लिए व्रत, जो चाँद देखकर खोला जाता है।'),b('Sargi before sunrise, a full-day fast, evening katha with karwa pots, and moon-sighting through a sieve.','सूर्योदय से पहले सरगी, दिन भर का व्रत, शाम को करवे के साथ कथा, और छलनी से चाँद देखना।'),b('Sargi: mathri, pheni, fruits, dry fruits.','सरगी: मठरी, फेनी, फल, मेवे।')),
+'ahoi-ashtami':I('⭐',b('Mothers fast for the well-being of their children and worship Ahoi Mata.','माताएँ संतान की भलाई के लिए व्रत रखती हैं और अहोई माता की पूजा करती हैं।'),b('An Ahoi Mata picture is drawn on the wall; the fast ends after seeing the stars in the evening.','दीवार पर अहोई माता का चित्र बनाया जाता है; शाम को तारे देखकर व्रत खोला जाता है।'),b('Puri, halwa, mathri.','पूरी, हलवा, मठरी।')),
+'dhanteras':I('🪙',b('The first day of Diwali. Dhanvantari, the god of medicine, appeared with a pot of nectar on this day.','दिवाली का पहला दिन। इसी दिन औषधियों के देवता धन्वंतरि अमृत कलश लेकर प्रकट हुए।'),b('Buying metal utensils or gold, cleaning homes and lighting a lamp for Yama at the door.','धातु के बर्तन या सोना ख़रीदना, घर की सफ़ाई और द्वार पर यम दीपक जलाना।'),null),
+'choti-diwali':I('🪔',b('Narak Chaturdashi — Krishna (with Satyabhama) defeated the demon Narakasura and freed 16,000 captives.','नरक चतुर्दशी — कृष्ण ने (सत्यभामा के साथ) नरकासुर को हराकर 16,000 बंदियों को मुक्त किया।'),b('Early-morning oil bath (abhyanga), lighting the first lamps, small fireworks.','सुबह-सुबह तेल स्नान (अभ्यंग), पहले दीये जलाना, थोड़े पटाखे।'),null),
+'diwali':I('🪔',b('The festival of lights. Lord Rama returned to Ayodhya after 14 years, and Goddess Lakshmi is welcomed into homes.','दीपों का त्योहार। भगवान राम 14 साल बाद अयोध्या लौटे, और माँ लक्ष्मी का घरों में स्वागत होता है।'),b('Homes are cleaned and decorated with diyas and rangoli; Lakshmi–Ganesh puja in the evening Pradosh/Sthir lagna muhurat; sweets are shared.','घरों की सफ़ाई और दीयों-रंगोली से सजावट; शाम को प्रदोष/स्थिर लग्न मुहूर्त में लक्ष्मी-गणेश पूजा; मिठाइयाँ बाँटना।'),b('Kaju katli, laddoo, kheel-batashe, chakli, gulab jamun.','काजू कतली, लड्डू, खील-बताशे, चकली, गुलाब जामुन।')),
+'govardhan-puja':I('⛰️',b('Krishna lifted Govardhan hill on his little finger to protect the people of Braj from Indra\'s storms.','कृष्ण ने इंद्र के तूफ़ान से ब्रजवासियों को बचाने के लिए छोटी उँगली पर गोवर्धन पर्वत उठाया।'),b('A small Govardhan is made from cow dung and worshipped; Annakut — a mountain of many dishes — is offered.','गोबर से छोटा गोवर्धन बनाकर पूजा; अन्नकूट — ढेर सारे व्यंजनों का भोग।'),b('Annakut sabzi, kadhi, bajra khichdi.','अन्नकूट की सब्ज़ी, कढ़ी, बाजरे की खिचड़ी।')),
+'bhai-dooj':I('👫',b('Yamuna welcomed her brother Yama with a tilak and a feast; brothers and sisters celebrate their bond.','यमुना ने अपने भाई यम का तिलक और भोज से स्वागत किया; भाई-बहन अपने रिश्ते का उत्सव मनाते हैं।'),b('Sisters apply tilak and pray for their brother\'s long life; brothers give gifts.','बहनें तिलक लगाकर भाई की लंबी उम्र की कामना करती हैं; भाई उपहार देते हैं।'),b('Sweets, a festive meal.','मिठाई, उत्सव का भोजन।')),
+'chhath-puja':I('🌅',b('A four-day festival worshipping Surya (the Sun) and Chhathi Maiya, mostly in Bihar, Jharkhand and eastern UP.','सूर्य देव और छठी मैया की चार दिन की पूजा, मुख्यतः बिहार, झारखंड और पूर्वी उत्तर प्रदेश में।'),b('Strict 36-hour fast; arghya to the setting and rising Sun while standing in water.','36 घंटे का कठिन व्रत; पानी में खड़े होकर डूबते और उगते सूर्य को अर्घ्य।'),b('Thekua, kheer (rasiya), fruits in bamboo baskets.','ठेकुआ, खीर (रसियाव), बाँस की टोकरी में फल।')),
+'dev-uthani-ekadashi':I('🌅',b('Vishnu wakes from his four-month sleep; the wedding season begins again.','विष्णु चार महीने की योगनिद्रा से जागते हैं; विवाह का मौसम फिर शुरू होता है।'),b('Fasting, Vishnu puja, and in many homes Tulsi Vivah.','व्रत, विष्णु पूजा, और कई घरों में तुलसी विवाह।'),b('Singhara, sweet potato, sugarcane.','सिंघाड़ा, शकरकंद, गन्ना।')),
+'tulsi-vivah':I('🌿',b('The ceremonial wedding of the holy Tulsi plant with Lord Vishnu (as Shaligram).','पवित्र तुलसी का भगवान विष्णु (शालिग्राम) से विधिवत विवाह।'),b('The tulsi is decorated like a bride; a full wedding ritual is performed at home.','तुलसी को दुल्हन की तरह सजाया जाता है; घर पर पूरा विवाह संस्कार होता है।'),null),
+'kartik-purnima':I('🪔',b('Dev Deepawali — the gods are said to celebrate Diwali; Shiva defeated the demon Tripurasura.','देव दीपावली — माना जाता है कि देवता दिवाली मनाते हैं; शिव ने त्रिपुरासुर का वध किया।'),b('Holy dips, lamps floated on rivers; Varanasi\'s ghats glow with lakhs of diyas.','पवित्र स्नान, नदियों में दीपदान; वाराणसी के घाट लाखों दीयों से जगमगाते हैं।'),null),
+'guru-nanak-jayanti':I('🙏',b('Gurpurab — birth anniversary of Guru Nanak Dev Ji, the first Sikh Guru.','गुरपुरब — पहले सिख गुरु, गुरु नानक देव जी का प्रकाश पर्व।'),b('Akhand Path, prabhat pheri, nagar kirtan and langar at gurdwaras.','अखंड पाठ, प्रभात फेरी, नगर कीर्तन और गुरुद्वारों में लंगर।'),b('Langar, kada prasad.','लंगर, कड़ा प्रसाद।')),
+'vivah-panchami':I('💐',b('The wedding anniversary of Lord Rama and Sita.','भगवान राम और सीता के विवाह की वर्षगाँठ।'),b('Reenactments of the wedding in temples, especially in Ayodhya and Janakpur.','मंदिरों में विवाह की झाँकी, ख़ासकर अयोध्या और जनकपुर में।'),null),
+'gita-jayanti':I('📖',b('The day Krishna spoke the Bhagavad Gita to Arjuna on the battlefield of Kurukshetra.','वह दिन जब कृष्ण ने कुरुक्षेत्र के युद्धभूमि में अर्जुन को भगवद्गीता का उपदेश दिया।'),b('Reading and chanting the Gita; Mokshada Ekadashi falls on the same day.','गीता पाठ; इसी दिन मोक्षदा एकादशी भी होती है।'),null),
+'dattatreya-jayanti':I('🕉️',b('Birthday of Lord Dattatreya, a combined form of Brahma, Vishnu and Shiva.','भगवान दत्तात्रेय का जन्मदिन, जो ब्रह्मा, विष्णु और महेश का संयुक्त रूप हैं।'),b('Prayers and bhajans, especially in Maharashtra and Karnataka.','पूजा और भजन, ख़ासकर महाराष्ट्र और कर्नाटक में।'),null),
+'sakat-chauth':I('🐘',b('Sankashti Chaturthi of Magha, when mothers pray to Ganesha for their children.','माघ की संकष्टी चतुर्थी, जब माताएँ संतान के लिए गणेश जी से प्रार्थना करती हैं।'),b('A day-long fast broken after moonrise with an offering to the Moon.','दिन भर का व्रत, जो चंद्रोदय के बाद अर्घ्य देकर खोला जाता है।'),b('Tilkut, til laddoo.','तिलकुट, तिल के लड्डू।')),
+'mauni-amavasya':I('🤫',b('The Amavasya of Magha, a day for silence (maun) and holy bathing, especially at Prayagraj.','माघ की अमावस्या, मौन और पवित्र स्नान का दिन, ख़ासकर प्रयागराज में।'),b('Keeping silence, bathing in the Ganga and charity.','मौन रखना, गंगा स्नान और दान।'),null),
+'ravidas-jayanti':I('🙏',b('Birth anniversary of Sant Ravidas, a 15th-century poet-saint who taught equality and devotion.','15वीं सदी के संत कवि रविदास की जयंती, जिन्होंने समानता और भक्ति का संदेश दिया।'),b('Kirtans, processions and reading his verses.','कीर्तन, शोभायात्राएँ और उनकी वाणी का पाठ।'),null),
+'republic-day':I('🇮🇳',b('India\'s Constitution came into force on 26 January 1950.','26 जनवरी 1950 को भारत का संविधान लागू हुआ।'),b('The grand parade on Kartavya Path, flag hoisting in schools and offices.','कर्तव्य पथ पर भव्य परेड, स्कूलों और दफ़्तरों में ध्वजारोहण।'),null),
+'independence-day':I('🇮🇳',b('India became free from British rule on 15 August 1947.','15 अगस्त 1947 को भारत अंग्रेज़ी शासन से आज़ाद हुआ।'),b('The Prime Minister hoists the flag at the Red Fort; kites, songs and school programmes.','प्रधानमंत्री लाल क़िले पर तिरंगा फहराते हैं; पतंगें, देशभक्ति गीत और स्कूल कार्यक्रम।'),null),
+'gandhi-jayanti':I('👓',b('Birthday of Mahatma Gandhi (1869), the Father of the Nation, also the International Day of Non-Violence.','राष्ट्रपिता महात्मा गांधी (1869) का जन्मदिन, जो अंतरराष्ट्रीय अहिंसा दिवस भी है।'),b('Prayer meetings, cleanliness drives and singing "Raghupati Raghav".','प्रार्थना सभाएँ, स्वच्छता अभियान और "रघुपति राघव" गायन।'),null),
+'childrens-day':I('🧒',b('Birthday of Pandit Jawaharlal Nehru, India\'s first Prime Minister, who loved children.','भारत के पहले प्रधानमंत्री पंडित जवाहरलाल नेहरू का जन्मदिन, जिन्हें बच्चे बहुत प्यारे थे।'),b('Fun events, games and treats in schools.','स्कूलों में मज़ेदार कार्यक्रम, खेल और उपहार।'),null),
+'ambedkar-jayanti':I('📘',b('Birthday of Dr B. R. Ambedkar, chief architect of the Indian Constitution.','भारतीय संविधान के मुख्य शिल्पकार डॉ. बी. आर. आंबेडकर का जन्मदिन।'),b('Tributes, rallies and talks on equality and justice.','श्रद्धांजलि, रैलियाँ और समानता व न्याय पर चर्चा।'),null),
+'eid-al-fitr':I('🌙',b('Marks the end of Ramadan, the month of fasting. The date depends on sighting the new moon.','रमज़ान के रोज़ों के महीने का अंत। तारीख़ नए चाँद के दिखने पर निर्भर करती है।'),b('Special prayers, new clothes, visiting friends and giving charity (zakat al-fitr).','ख़ास नमाज़, नए कपड़े, दोस्तों से मिलना और ज़कात-उल-फ़ित्र देना।'),b('Sheer khurma, seviyan, biryani.','शीर ख़ुरमा, सेवइयाँ, बिरयानी।')),
+'eid-al-adha':I('🌙',b('Bakrid honours Prophet Ibrahim\'s faith. The date depends on the moon.','बकरीद पैग़ंबर इब्राहीम की आस्था की याद में। तारीख़ चाँद पर निर्भर।'),b('Eid prayers, sharing food with family, neighbours and the poor.','ईद की नमाज़, परिवार, पड़ोसियों और ग़रीबों के साथ भोजन बाँटना।'),null),
+'muharram':I('🕌',b('The first month of the Islamic calendar; Ashura remembers the martyrdom of Imam Husain at Karbala.','इस्लामी कैलेंडर का पहला महीना; आशूरा करबला में इमाम हुसैन की शहादत की याद है।'),b('Mourning processions (tazia) and prayers.','मातमी जुलूस (ताज़िया) और दुआ।'),null),
+'milad-un-nabi':I('🌙',b('Birthday of Prophet Muhammad, observed by many Muslims.','पैग़ंबर मुहम्मद का जन्मदिन, जिसे बहुत से मुसलमान मनाते हैं।'),b('Prayers, processions and charity.','दुआ, जुलूस और दान।'),null),
+'good-friday':I('✝️',b('Christians remember the crucifixion of Jesus Christ.','ईसाई ईसा मसीह के सूली पर चढ़ाए जाने को याद करते हैं।'),b('Quiet church services and prayer.','चर्च में शांत प्रार्थना सभाएँ।'),null),
+'easter':I('🐣',b('Celebrates the resurrection of Jesus Christ.','ईसा मसीह के पुनर्जीवन का उत्सव।'),b('Church services, Easter eggs and family meals.','चर्च सेवाएँ, ईस्टर अंडे और पारिवारिक भोजन।'),null),
+'christmas':I('🎄',b('Celebrates the birth of Jesus Christ.','ईसा मसीह के जन्म का उत्सव।'),b('Decorated trees, carols, midnight mass and gifts from Santa Claus.','सजे हुए पेड़, कैरल, आधी रात की प्रार्थना और सांता क्लॉज़ के उपहार।'),b('Plum cake, cookies.','प्लम केक, कुकीज़।')),
+'guru-gobind-singh-jayanti':I('⚔️',b('Prakash Purab of Guru Gobind Singh Ji, the tenth Sikh Guru and founder of the Khalsa.','दसवें सिख गुरु और ख़ालसा के संस्थापक गुरु गोबिंद सिंह जी का प्रकाश पर्व।'),b('Nagar kirtan, kirtan and langar at gurdwaras.','नगर कीर्तन, कीर्तन और गुरुद्वारों में लंगर।'),null),
+'guru-tegh-bahadur-martyrdom':I('🙏',b('Remembers the martyrdom of Guru Tegh Bahadur Ji, the ninth Sikh Guru, who gave his life for freedom of faith.','नौवें सिख गुरु, गुरु तेग बहादुर जी की शहादत की याद, जिन्होंने धर्म की स्वतंत्रता के लिए प्राण दिए।'),b('Prayers and kirtan at gurdwaras, especially Sis Ganj Sahib in Delhi.','गुरुद्वारों में अरदास और कीर्तन, ख़ासकर दिल्ली के शीशगंज साहिब में।'),null)
+};
+['pausha-purnima','magha-purnima','jyeshtha-purnima'].forEach(k=>INFO[k]=I('🌕',b('A full-moon day; holy bathing, charity and Satyanarayan katha are popular.','पूर्णिमा का दिन; पवित्र स्नान, दान और सत्यनारायण कथा लोकप्रिय हैं।'),b('Fasting, river bath and donating food or clothes.','व्रत, नदी स्नान और भोजन या वस्त्र दान।'),null));
+INFO['shattila-ekadashi']=I('🙏',b('An Ekadashi of Magha where sesame (til) is used in six ways — bathing, eating, donating and more.','माघ की एकादशी जिसमें तिल का छह तरह से उपयोग होता है — स्नान, भोजन, दान आदि।'),b('Fasting, Vishnu puja and donating sesame.','व्रत, विष्णु पूजा और तिल दान।'),null);
+INFO['adhik-maas-end']=INFO['adhik-maas-start'];
+const VRAT_INFO={
+ ekadashi:b('The 11th tithi of each half-month, sacred to Vishnu. Devotees fast (often avoiding grains) and break the fast (parana) on Dwadashi after sunrise.','हर पक्ष की 11वीं तिथि, भगवान विष्णु को समर्पित। भक्त उपवास रखते हैं (अक्सर अनाज छोड़कर) और द्वादशी को सूर्योदय के बाद पारण करते हैं।'),
+ purnima:b('Full moon. Popular for Satyanarayan katha, holy bathing and charity.','पूर्णिमा। सत्यनारायण कथा, पवित्र स्नान और दान के लिए लोकप्रिय।'),
+ amavasya:b('New moon. A day to remember ancestors with tarpan and charity.','अमावस्या। तर्पण और दान से पितरों को याद करने का दिन।'),
+ pradosh:b('Trayodashi at twilight, sacred to Shiva. Worship is done in the Pradosh period around sunset.','सायंकाल की त्रयोदशी, शिव को समर्पित। पूजा सूर्यास्त के आसपास प्रदोष काल में होती है।'),
+ sankashti:b('Krishna Chaturthi sacred to Ganesha; the fast ends after moonrise.','गणेश जी को समर्पित कृष्ण चतुर्थी; व्रत चंद्रोदय के बाद खुलता है।'),
+ vinayaka:b('Shukla Chaturthi sacred to Ganesha; worship is done at midday.','गणेश जी को समर्पित शुक्ल चतुर्थी; पूजा दोपहर में होती है।'),
+ shivaratri:b('Monthly night of Shiva on Krishna Chaturdashi; worship at midnight (Nishita).','कृष्ण चतुर्दशी पर शिव की मासिक रात्रि; पूजा निशीथ काल में।'),
+ durgashtami:b('Monthly Shukla Ashtami for Goddess Durga.','माँ दुर्गा के लिए मासिक शुक्ल अष्टमी।'),
+ sankranti:b('The Sun moves into a new rashi. Bathing and charity are considered meritorious around this time.','सूर्य नई राशि में प्रवेश करता है। इस समय स्नान और दान को पुण्यकारी माना जाता है।')};
+const LEARN_TXT={
+ what:b(`<h2>🪔 What is a Panchang?</h2><p><b>Panchang</b> (पंचांग) means "five limbs". It is the traditional Hindu calendar and almanac. Each day it describes five things:</p>
+ <ol style="margin-left:20px"><li><b>Tithi</b> — the lunar day, based on the angle between the Moon and the Sun (every 12°).</li><li><b>Vara</b> — the weekday, ruled by a planet.</li><li><b>Nakshatra</b> — which of 27 star-groups the Moon is in.</li><li><b>Yoga</b> — a combination of the Sun's and Moon's positions (27 kinds).</li><li><b>Karana</b> — half of a tithi (11 kinds).</li></ol>
+ <p>The Hindu <b>day starts at sunrise</b>, not midnight. So the tithi "of the day" is usually the one running at sunrise, even if it changes later.</p>
+ <p>A <b>lunar month</b> has two halves: <b>Shukla Paksha</b> (waxing, new moon → full moon) and <b>Krishna Paksha</b> (waning). In North India months end on Purnima (<b>Purnimanta</b>); in the South and West they end on Amavasya (<b>Amanta</b>). The festivals fall on the same day — only the month name differs in Krishna Paksha.</p>
+ <p>Because 12 lunar months are about 11 days shorter than a solar year, an <b>Adhik Maas</b> (extra month) is added about every 32½ months. 2026 has Adhik Jyeshtha.</p>
+ <p><b>Eras:</b> Vikram Samvat is 57 years ahead of the Gregorian year (after Chaitra), and Shaka Samvat (India's national calendar) is 78 years behind.</p>`,
+ `<h2>🪔 पंचांग क्या है?</h2><p><b>पंचांग</b> का अर्थ है "पाँच अंग"। यह पारंपरिक हिंदू कैलेंडर है। हर दिन यह पाँच बातें बताता है:</p>
+ <ol style="margin-left:20px"><li><b>तिथि</b> — चंद्र दिवस, जो चंद्रमा और सूर्य के बीच के कोण (हर 12°) पर आधारित है।</li><li><b>वार</b> — सप्ताह का दिन, जिसका स्वामी एक ग्रह है।</li><li><b>नक्षत्र</b> — 27 तारा-समूहों में से वह जिसमें चंद्रमा है।</li><li><b>योग</b> — सूर्य और चंद्र की स्थिति का मेल (27 प्रकार)।</li><li><b>करण</b> — तिथि का आधा भाग (11 प्रकार)।</li></ol>
+ <p>हिंदू <b>दिन सूर्योदय से शुरू</b> होता है, आधी रात से नहीं। इसलिए दिन की तिथि आमतौर पर वह होती है जो सूर्योदय के समय चल रही हो।</p>
+ <p><b>चंद्र मास</b> के दो पक्ष होते हैं: <b>शुक्ल पक्ष</b> (अमावस्या से पूर्णिमा) और <b>कृष्ण पक्ष</b>। उत्तर भारत में महीने पूर्णिमा पर ख़त्म होते हैं (<b>पूर्णिमांत</b>); दक्षिण और पश्चिम में अमावस्या पर (<b>अमांत</b>)। त्योहार एक ही दिन पड़ते हैं — बस कृष्ण पक्ष में महीने का नाम बदलता है।</p>
+ <p>12 चंद्र मास सौर वर्ष से लगभग 11 दिन छोटे होते हैं, इसलिए लगभग हर 32½ महीने में एक <b>अधिक मास</b> जुड़ता है। 2026 में अधिक ज्येष्ठ है।</p>
+ <p><b>संवत:</b> विक्रम संवत (चैत्र के बाद) ग्रेगोरियन वर्ष से 57 साल आगे है, और शक संवत (भारत का राष्ट्रीय कैलेंडर) 78 साल पीछे।</p>`),
+ tithi:b(`<h2>🌙 Tithis</h2><p>Every time the Moon moves 12° further ahead of the Sun, a new tithi begins. There are 30 tithis in a lunar month — 15 in each paksha. A tithi lasts about 19 to 26 hours, so sometimes a tithi is skipped (<b>kshaya</b>) or covers two sunrises (<b>vriddhi</b>).</p>`,
+   `<h2>🌙 तिथियाँ</h2><p>जब भी चंद्रमा सूर्य से 12° और आगे बढ़ता है, एक नई तिथि शुरू होती है। एक चंद्र मास में 30 तिथियाँ होती हैं — हर पक्ष में 15। एक तिथि लगभग 19 से 26 घंटे की होती है, इसलिए कभी कोई तिथि छूट जाती है (<b>क्षय</b>) या दो सूर्योदयों तक रहती है (<b>वृद्धि</b>)।</p>`),
+ nak:b(`<h2>✨ Nakshatras</h2><p>The sky along the Moon's path is divided into 27 equal parts of 13°20′, each called a nakshatra (lunar mansion). The Moon spends about one day in each. Every nakshatra has 4 padas (quarters) of 3°20′, a ruling planet (used in Vimshottari dasha) and a presiding deity.</p>`,
+   `<h2>✨ नक्षत्र</h2><p>चंद्रमा के मार्ग वाले आकाश को 13°20′ के 27 बराबर भागों में बाँटा गया है, जिन्हें नक्षत्र कहते हैं। चंद्रमा हर नक्षत्र में लगभग एक दिन रहता है। हर नक्षत्र के 4 पाद (3°20′ के), एक स्वामी ग्रह (विंशोत्तरी दशा में उपयोगी) और एक देवता होते हैं।</p>`),
+ yoga:b(`<h2>🧘 Yoga</h2><p>Add the sidereal longitudes of the Sun and the Moon and divide by 13°20′ — that gives one of 27 yogas. Nine are considered inauspicious for starting new work.</p>`,
+   `<h2>🧘 योग</h2><p>सूर्य और चंद्रमा के निरयन भोगांश को जोड़कर 13°20′ से भाग दें — 27 में से एक योग मिलता है। नौ योग नए काम के लिए अशुभ माने जाते हैं।</p>`),
+ karana:b(`<h3>🔱 Karana</h3><p>Each tithi has two karanas (6° each), so a month has 60. Seven movable karanas repeat eight times; four fixed ones appear once. <b>Vishti (Bhadra)</b> is avoided for auspicious work — for example, Rakhi and Holika Dahan are done outside Bhadra.</p>`,
+   `<h3>🔱 करण</h3><p>हर तिथि में दो करण (6° के) होते हैं, इसलिए महीने में 60। सात चर करण आठ बार दोहराए जाते हैं; चार स्थिर करण एक बार आते हैं। <b>विष्टि (भद्रा)</b> में शुभ काम नहीं किए जाते — जैसे राखी और होलिका दहन भद्रा के बाहर किए जाते हैं।</p>`),
+ muh:b(`<h2>⏰ Muhurat & daily timings</h2>
+  <p><b>Rahu Kaal</b>: daytime (sunrise→sunset) is split into 8 parts; one part each weekday belongs to Rahu and is avoided for new beginnings (Mon 2nd, Sat 3rd, Fri 4th, Wed 5th, Thu 6th, Tue 7th, Sun 8th). <b>Yamaganda</b> and <b>Gulika</b> work the same way with different parts.</p>
+  <p><b>Abhijit Muhurat</b>: the 8th of 15 daytime muhurtas, around local noon — good for most work (traditionally skipped on Wednesday).</p>
+  <p><b>Brahma Muhurat</b>: the 14th muhurta of the night, about 1½ hours before sunrise — ideal for study, prayer and yoga.</p>
+  <p><b>Choghadiya</b>: day and night are each split into 8 parts named Amrit, Shubh, Labh, Char (good), and Udveg, Rog, Kaal (avoid). Popular in Gujarat and Rajasthan for travel and business.</p>
+  <p><b>Hora</b>: 24 planetary hours starting at sunrise with the weekday's lord, following the order Sun → Venus → Mercury → Moon → Saturn → Jupiter → Mars.</p>
+  <p><b>Dishashool</b>: a direction considered unlucky for travel on each weekday.</p>`,
+  `<h2>⏰ मुहूर्त और दैनिक समय</h2>
+  <p><b>राहु काल</b>: दिन (सूर्योदय→सूर्यास्त) को 8 भागों में बाँटा जाता है; हर वार का एक भाग राहु का होता है जिसमें नया काम नहीं किया जाता (सोम दूसरा, शनि तीसरा, शुक्र चौथा, बुध पाँचवाँ, गुरु छठा, मंगल सातवाँ, रवि आठवाँ)। <b>यमगंड</b> और <b>गुलिक</b> भी इसी तरह अलग भागों में होते हैं।</p>
+  <p><b>अभिजीत मुहूर्त</b>: दिन के 15 मुहूर्तों में 8वाँ, स्थानीय दोपहर के आसपास — ज़्यादातर कामों के लिए शुभ (परंपरा से बुधवार को नहीं)।</p>
+  <p><b>ब्रह्म मुहूर्त</b>: रात का 14वाँ मुहूर्त, सूर्योदय से लगभग डेढ़ घंटा पहले — पढ़ाई, पूजा और योग के लिए आदर्श।</p>
+  <p><b>चौघड़िया</b>: दिन और रात दोनों को 8-8 भागों में बाँटा जाता है — अमृत, शुभ, लाभ, चर (शुभ) और उद्वेग, रोग, काल (अशुभ)। गुजरात और राजस्थान में यात्रा और व्यापार के लिए लोकप्रिय।</p>
+  <p><b>होरा</b>: सूर्योदय से वार के स्वामी से शुरू होने वाले 24 ग्रह-घंटे, क्रम सूर्य → शुक्र → बुध → चंद्र → शनि → गुरु → मंगल।</p>
+  <p><b>दिशाशूल</b>: हर वार की वह दिशा जिसमें यात्रा अशुभ मानी जाती है।</p>`),
+ how:b(`<h2>🔭 How this app calculates</h2><p>Everything is calculated live in your browser — no internet lookup is needed after the page loads.</p>
+  <ul style="margin-left:20px"><li><b>Sun & Moon positions</b>: astronomical series from Jean Meeus' <i>Astronomical Algorithms</i> (60+ terms for the Moon), accurate to a few arc-seconds for the Sun and about 10″ for the Moon.</li>
+  <li><b>Sidereal zodiac</b>: Lahiri (Chitrapaksha) ayanamsa, the official Indian standard.</li>
+  <li><b>Tithi / nakshatra / yoga / karana end times</b>: found by repeatedly refining the moment the angle crosses each boundary.</li>
+  <li><b>Sunrise & sunset</b>: when the Sun's upper edge touches the horizon, including atmospheric refraction. <b>Moonrise</b> uses the Moon's centre.</li>
+  <li><b>Lunar months</b>: named by the Sun's rashi at the new moon that starts the month; a month with no Sun sign change is Adhik.</li>
+  <li><b>Vrats</b> (Ekadashi, Pradosh, Sankashti…) are found by checking which tithi is running at the traditional time (sunrise, sunset, moonrise or midnight). Big festivals come from the Delhi panchang for 2026–2027.</li></ul>
+  <p>Results were checked against a published Delhi panchang: tithi and nakshatra end times match within 1–2 minutes. Small differences of a few minutes are normal between panchangs.</p>`,
+  `<h2>🔭 यह ऐप गणना कैसे करता है</h2><p>सब कुछ आपके ब्राउज़र में ही गणना होता है — पेज खुलने के बाद इंटरनेट की ज़रूरत नहीं।</p>
+  <ul style="margin-left:20px"><li><b>सूर्य और चंद्र की स्थिति</b>: ज्याँ मीउस की <i>Astronomical Algorithms</i> के खगोलीय सूत्र (चंद्रमा के लिए 60 से ज़्यादा पद) — सूर्य के लिए कुछ विकला और चंद्र के लिए लगभग 10″ तक सटीक।</li>
+  <li><b>निरयन राशिचक्र</b>: लाहिड़ी (चित्रापक्ष) अयनांश, भारत का आधिकारिक मानक।</li>
+  <li><b>तिथि / नक्षत्र / योग / करण का समाप्ति समय</b>: कोण के हर सीमा पार करने का क्षण बार-बार सुधार कर निकाला जाता है।</li>
+  <li><b>सूर्योदय और सूर्यास्त</b>: जब सूर्य का ऊपरी किनारा क्षितिज छूता है, वायुमंडलीय अपवर्तन सहित। <b>चंद्रोदय</b> चंद्रमा के केंद्र से।</li>
+  <li><b>चंद्र मास</b>: महीना शुरू करने वाली अमावस्या पर सूर्य की राशि से नाम; जिस महीने में सूर्य राशि न बदले वह अधिक मास।</li>
+  <li><b>व्रत</b> (एकादशी, प्रदोष, संकष्टी…) परंपरागत समय (सूर्योदय, सूर्यास्त, चंद्रोदय या मध्यरात्रि) पर चल रही तिथि देखकर निकाले जाते हैं। बड़े त्योहार 2026–2027 के दिल्ली पंचांग से लिए गए हैं।</li></ul>
+  <p>परिणामों की जाँच प्रकाशित दिल्ली पंचांग से की गई: तिथि और नक्षत्र के समाप्ति समय 1–2 मिनट के भीतर मेल खाते हैं। पंचांगों में कुछ मिनट का अंतर सामान्य है।</p>`)
+};
+
+
+const T={
+en:{appName:'Panchang',tagline:'Hindu calendar · festivals · muhurat',langBtn:'हिंदी',
+ day:'📅 Day',month:'🗓️ Month',fest:'🎉 Festivals',learn:'📖 Learn',
+ language:'Language',theme:'Theme',light:'☀️ Day',dark:'🌙 Night',auto:'🌗 Auto',city:'City',myLoc:'📍 Use my location',locating:'Finding you…',locFail:'Could not get your location.',
+ timeFmt:'Time format',h12:'12-hour',h24:'24-hour',monthSys:'Month system',purn:'Purnimanta (North)',aman:'Amanta (South/West)',
+ disclaimer:'✦ Times are calculated with standard astronomical formulas for the chosen city and may differ by a few minutes from printed panchangs. Festival dates follow the common North Indian (Delhi) calendar; regional customs vary. For important rituals, please confirm with your family priest. ✦',
+ today:'Today',goto:'Go to date',prev:'Previous',next:'Next',
+ tithi:'Tithi',nak:'Nakshatra',yoga:'Yoga',karana:'Karana',vara:'Vara (weekday)',paksha:'Paksha',
+ shukla:'Shukla Paksha',krishna:'Krishna Paksha',till:'till',upto:'up to',fullnight:'full night',then:'then',
+ sunmoon:'Sun & Moon',sunrise:'Sunrise',sunset:'Sunset',moonrise:'Moonrise',moonset:'Moonset',noMoon:'—',dayLen:'Day length',nightLen:'Night length',
+ moonSign:'Moon sign (Chandra rashi)',sunSign:'Sun sign (Surya rashi)',sunNak:'Sun nakshatra',illum:'Moon lit',
+ calInfo:'Hindu calendar',vikram:'Vikram Samvat',shaka:'Shaka Samvat',samvatsara:'Samvatsara',amantaM:'Amanta month',purnimantaM:'Purnimanta month',ritu:'Ritu (season)',ayana:'Ayana',
+ uttara:'Uttarayana',dakshina:'Dakshinayana',adhik:'Adhik (extra) month',dishashool:'Dishashool (avoid travel)',ayanamsa:'Ayanamsa (Lahiri)',
+ muhurat:'Muhurat & timings',good:'Good times',bad:'Times to avoid',brahma:'Brahma Muhurat',abhijit:'Abhijit Muhurat',godhuli:'Godhuli (dusk)',nishita:'Nishita (midnight)',
+ rahu:'Rahu Kaal',yama:'Yamaganda',gulika:'Gulika Kaal',abhNoteWed:'Traditionally not used on Wednesdays',
+ timeline:'Day at a glance',tlRahu:'Rahu Kaal',tlAbh:'Abhijit',tlYama:'Yamaganda',tlGuli:'Gulika',tlNow:'Now',
+ chog:'Choghadiya',chDay:'Day',chNight:'Night',hora:'Hora (planetary hours)',
+ festToday:'Festivals & vrats',none:'No major festival today.',
+ nextFest:'Next big festival',inDays:'in {n} days',tomorrow:'tomorrow',isToday:'today! 🎉',ago:'{n} days ago',
+ all:'All',major:'Major',vrat:'Vrats',national:'National',other:'Other faiths',search:'Search festivals…',year:'Year',
+ howTo:'How it is celebrated',foods:'Special foods',story:'The story',tithiOn:'Panchang that day',noFest:'Nothing found.',
+ monthFest:'This month',
+ lWhat:'🪔 Basics',lTithi:'🌙 Tithis',lNak:'✨ Nakshatras',lYoga:'🧘 Yoga & Karana',lMuh:'⏰ Muhurat',lHow:'🔭 How it works',
+ ekadashi:'Ekadashi',purnima:'Purnima',amavasya:'Amavasya',pradosh:'Pradosh Vrat',sankashti:'Sankashti Chaturthi',vinayaka:'Vinayaka Chaturthi',shivaratri:'Masik Shivaratri',durgashtami:'Masik Durgashtami',sankranti:'Sankranti',
+ karanaBad:'Bhadra — avoid new work',
+ wd:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],wds:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+ varas:['Ravivar','Somvar','Mangalvar','Budhvar','Guruvar','Shukravar','Shanivar'],
+ dirs:['West','East','North','North','South','West','East'],
+ copy:'📤 Share day',showPast:'Show {n} earlier dates',copied:'Copied to clipboard!',print:'🖨️ Print'
+},
+hi:{appName:'पंचांग',tagline:'हिंदू कैलेंडर · त्योहार · मुहूर्त',langBtn:'English',
+ day:'📅 दिन',month:'🗓️ महीना',fest:'🎉 त्योहार',learn:'📖 सीखें',
+ language:'भाषा',theme:'थीम',light:'☀️ दिन',dark:'🌙 रात',auto:'🌗 अपने-आप',city:'शहर',myLoc:'📍 मेरा स्थान',locating:'स्थान खोजा जा रहा है…',locFail:'आपका स्थान नहीं मिल पाया।',
+ timeFmt:'समय प्रारूप',h12:'12 घंटे',h24:'24 घंटे',monthSys:'मास पद्धति',purn:'पूर्णिमांत (उत्तर)',aman:'अमांत (दक्षिण/पश्चिम)',
+ disclaimer:'✦ समय चुने गए शहर के लिए मानक खगोलीय सूत्रों से निकाले गए हैं और छपे पंचांग से कुछ मिनट अलग हो सकते हैं। त्योहारों की तारीख़ें सामान्य उत्तर भारतीय (दिल्ली) पंचांग के अनुसार हैं; क्षेत्रीय परंपराएँ अलग हो सकती हैं। ज़रूरी अनुष्ठानों के लिए कृपया अपने पुरोहित से पुष्टि करें। ✦',
+ today:'आज',goto:'तारीख़ चुनें',prev:'पिछला',next:'अगला',
+ tithi:'तिथि',nak:'नक्षत्र',yoga:'योग',karana:'करण',vara:'वार',paksha:'पक्ष',
+ shukla:'शुक्ल पक्ष',krishna:'कृष्ण पक्ष',till:'तक',upto:'तक',fullnight:'पूरी रात',then:'फिर',
+ sunmoon:'सूर्य और चंद्र',sunrise:'सूर्योदय',sunset:'सूर्यास्त',moonrise:'चंद्रोदय',moonset:'चंद्रास्त',noMoon:'—',dayLen:'दिनमान',nightLen:'रात्रिमान',
+ moonSign:'चंद्र राशि',sunSign:'सूर्य राशि',sunNak:'सूर्य नक्षत्र',illum:'चंद्र प्रकाश',
+ calInfo:'हिंदू पंचांग',vikram:'विक्रम संवत',shaka:'शक संवत',samvatsara:'संवत्सर',amantaM:'अमांत मास',purnimantaM:'पूर्णिमांत मास',ritu:'ऋतु',ayana:'अयन',
+ uttara:'उत्तरायण',dakshina:'दक्षिणायन',adhik:'अधिक मास',dishashool:'दिशाशूल (यात्रा न करें)',ayanamsa:'अयनांश (लाहिड़ी)',
+ muhurat:'मुहूर्त और समय',good:'शुभ समय',bad:'अशुभ समय',brahma:'ब्रह्म मुहूर्त',abhijit:'अभिजीत मुहूर्त',godhuli:'गोधूलि',nishita:'निशीथ काल',
+ rahu:'राहु काल',yama:'यमगंड',gulika:'गुलिक काल',abhNoteWed:'परंपरा अनुसार बुधवार को नहीं लिया जाता',
+ timeline:'दिन एक नज़र में',tlRahu:'राहु काल',tlAbh:'अभिजीत',tlYama:'यमगंड',tlGuli:'गुलिक',tlNow:'अभी',
+ chog:'चौघड़िया',chDay:'दिन',chNight:'रात',hora:'होरा',
+ festToday:'त्योहार और व्रत',none:'आज कोई बड़ा त्योहार नहीं है।',
+ nextFest:'अगला बड़ा त्योहार',inDays:'{n} दिन बाद',tomorrow:'कल',isToday:'आज! 🎉',ago:'{n} दिन पहले',
+ all:'सभी',major:'प्रमुख',vrat:'व्रत',national:'राष्ट्रीय',other:'अन्य धर्म',search:'त्योहार खोजें…',year:'वर्ष',
+ howTo:'कैसे मनाते हैं',foods:'ख़ास पकवान',story:'कथा',tithiOn:'उस दिन का पंचांग',noFest:'कुछ नहीं मिला।',
+ monthFest:'इस महीने',
+ lWhat:'🪔 मूल बातें',lTithi:'🌙 तिथियाँ',lNak:'✨ नक्षत्र',lYoga:'🧘 योग और करण',lMuh:'⏰ मुहूर्त',lHow:'🔭 गणना कैसे',
+ ekadashi:'एकादशी',purnima:'पूर्णिमा',amavasya:'अमावस्या',pradosh:'प्रदोष व्रत',sankashti:'संकष्टी चतुर्थी',vinayaka:'विनायक चतुर्थी',shivaratri:'मासिक शिवरात्रि',durgashtami:'मासिक दुर्गाष्टमी',sankranti:'संक्रांति',
+ karanaBad:'भद्रा — नया काम टालें',
+ wd:['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'],wds:['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'],
+ varas:['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'],
+ dirs:['पश्चिम','पूर्व','उत्तर','उत्तर','दक्षिण','पश्चिम','पूर्व'],
+ copy:'📤 दिन साझा करें',showPast:'पहले की {n} तारीख़ें दिखाएँ',copied:'कॉपी हो गया!',print:'🖨️ प्रिंट'
+}};
+
+const TITHI=[b('Pratipada','प्रतिपदा'),b('Dwitiya','द्वितीया'),b('Tritiya','तृतीया'),b('Chaturthi','चतुर्थी'),b('Panchami','पंचमी'),b('Shashthi','षष्ठी'),b('Saptami','सप्तमी'),b('Ashtami','अष्टमी'),b('Navami','नवमी'),b('Dashami','दशमी'),b('Ekadashi','एकादशी'),b('Dwadashi','द्वादशी'),b('Trayodashi','त्रयोदशी'),b('Chaturdashi','चतुर्दशी'),b('Purnima','पूर्णिमा')];
+const AMAVASYA=b('Amavasya','अमावस्या');
+const TITHI_DEITY=[b('Agni','अग्नि'),b('Brahma','ब्रह्मा'),b('Gauri','गौरी'),b('Ganesha','गणेश'),b('Nag Devta','नाग देवता'),b('Kartikeya','कार्तिकेय'),b('Surya','सूर्य'),b('Shiva','शिव'),b('Durga','दुर्गा'),b('Yama','यम'),b('Vishnu','विष्णु'),b('Vishnu (Hari)','हरि'),b('Kamadeva','कामदेव'),b('Shiva (Kali)','शिव (काली)'),b('Chandra','चंद्र')];
+const TITHI_GROUP=[b('Nanda (joyful)','नंदा'),b('Bhadra (good)','भद्रा'),b('Jaya (victory)','जया'),b('Rikta (empty)','रिक्ता'),b('Purna (full)','पूर्णा')];
+const NAK=[
+ [b('Ashwini','अश्विनी'),'ketu',b('Ashwini Kumaras','अश्विनी कुमार'),b('horse head','घोड़े का सिर')],[b('Bharani','भरणी'),'venus',b('Yama','यम'),b('yoni','योनि')],
+ [b('Krittika','कृत्तिका'),'sun',b('Agni','अग्नि'),b('razor / flame','उस्तरा / लौ')],[b('Rohini','रोहिणी'),'moon',b('Brahma','ब्रह्मा'),b('ox cart','बैलगाड़ी')],
+ [b('Mrigashira','मृगशिरा'),'mars',b('Soma','सोम'),b('deer head','हिरण का सिर')],[b('Ardra','आर्द्रा'),'rahu',b('Rudra','रुद्र'),b('teardrop','आँसू')],
+ [b('Punarvasu','पुनर्वसु'),'jupiter',b('Aditi','अदिति'),b('quiver of arrows','तरकश')],[b('Pushya','पुष्य'),'saturn',b('Brihaspati','बृहस्पति'),b('cow\'s udder / flower','गाय का थन / फूल')],
+ [b('Ashlesha','आश्लेषा'),'mercury',b('Nagas','नाग'),b('coiled serpent','कुंडली मारे साँप')],[b('Magha','मघा'),'ketu',b('Pitrs (ancestors)','पितर'),b('royal throne','राजसिंहासन')],
+ [b('Purva Phalguni','पूर्वा फाल्गुनी'),'venus',b('Bhaga','भग'),b('front legs of a bed','पलंग के अगले पाए')],[b('Uttara Phalguni','उत्तरा फाल्गुनी'),'sun',b('Aryaman','अर्यमा'),b('back legs of a bed','पलंग के पिछले पाए')],
+ [b('Hasta','हस्त'),'moon',b('Savitr','सविता'),b('hand','हाथ')],[b('Chitra','चित्रा'),'mars',b('Vishwakarma','विश्वकर्मा'),b('bright jewel','चमकता रत्न')],
+ [b('Swati','स्वाती'),'rahu',b('Vayu','वायु'),b('young shoot in wind','हवा में कोंपल')],[b('Vishakha','विशाखा'),'jupiter',b('Indra & Agni','इंद्र और अग्नि'),b('decorated gateway','सजा हुआ तोरण')],
+ [b('Anuradha','अनुराधा'),'saturn',b('Mitra','मित्र'),b('lotus','कमल')],[b('Jyeshtha','ज्येष्ठा'),'mercury',b('Indra','इंद्र'),b('earring / umbrella','कुंडल / छत्र')],
+ [b('Mula','मूल'),'ketu',b('Nirriti','निरृति'),b('bunch of roots','जड़ों का गुच्छा')],[b('Purva Ashadha','पूर्वाषाढ़ा'),'venus',b('Apas (waters)','अपः (जल)'),b('fan','पंखा')],
+ [b('Uttara Ashadha','उत्तराषाढ़ा'),'sun',b('Vishvedevas','विश्वेदेव'),b('elephant tusk','हाथी दाँत')],[b('Shravana','श्रवण'),'moon',b('Vishnu','विष्णु'),b('ear','कान')],
+ [b('Dhanishta','धनिष्ठा'),'mars',b('Eight Vasus','अष्ट वसु'),b('drum','ढोल')],[b('Shatabhisha','शतभिषा'),'rahu',b('Varuna','वरुण'),b('empty circle','ख़ाली वृत्त')],
+ [b('Purva Bhadrapada','पूर्वा भाद्रपद'),'jupiter',b('Aja Ekapada','अज एकपाद'),b('sword','तलवार')],[b('Uttara Bhadrapada','उत्तरा भाद्रपद'),'saturn',b('Ahirbudhnya','अहिर्बुध्न्य'),b('twins / back of a cot','जुड़वाँ / खाट का पिछला भाग')],
+ [b('Revati','रेवती'),'mercury',b('Pushan','पूषा'),b('fish / drum','मछली / ढोल')]];
+const YOGA=[b('Vishkambha','विष्कम्भ'),b('Priti','प्रीति'),b('Ayushman','आयुष्मान'),b('Saubhagya','सौभाग्य'),b('Shobhana','शोभन'),b('Atiganda','अतिगण्ड'),b('Sukarma','सुकर्मा'),b('Dhriti','धृति'),b('Shula','शूल'),b('Ganda','गण्ड'),b('Vriddhi','वृद्धि'),b('Dhruva','ध्रुव'),b('Vyaghata','व्याघात'),b('Harshana','हर्षण'),b('Vajra','वज्र'),b('Siddhi','सिद्धि'),b('Vyatipata','व्यतीपात'),b('Variyana','वरीयान'),b('Parigha','परिघ'),b('Shiva','शिव'),b('Siddha','सिद्ध'),b('Sadhya','साध्य'),b('Shubha','शुभ'),b('Shukla','शुक्ल'),b('Brahma','ब्रह्म'),b('Indra','ऐन्द्र'),b('Vaidhriti','वैधृति')];
+const YOGA_BAD=[0,5,8,9,12,14,16,18,26];
+const YOGA_MEAN=[b('obstacle','रुकावट'),b('love','प्रेम'),b('long life','दीर्घायु'),b('good fortune','सौभाग्य'),b('splendour','शोभा'),b('danger','संकट'),b('good deeds','शुभ कर्म'),b('steadiness','धैर्य'),b('spear (pain)','शूल'),b('knot (trouble)','गाँठ'),b('growth','वृद्धि'),b('fixed / steady','स्थिर'),b('blow','आघात'),b('joy','हर्ष'),b('thunderbolt','वज्र'),b('success','सिद्धि'),b('calamity','विपत्ति'),b('comfort','आराम'),b('obstruction','बाधा'),b('auspicious','मंगल'),b('accomplished','सिद्ध'),b('achievable','साध्य'),b('auspicious','शुभ'),b('bright','उज्ज्वल'),b('wisdom','ज्ञान'),b('chief','श्रेष्ठ'),b('poor support','अस्थिर')];
+const KARANA=[b('Bava','बव'),b('Balava','बालव'),b('Kaulava','कौलव'),b('Taitila','तैतिल'),b('Gara','गर'),b('Vanija','वणिज'),b('Vishti (Bhadra)','विष्टि (भद्रा)'),b('Shakuni','शकुनि'),b('Chatushpada','चतुष्पद'),b('Naga','नाग'),b('Kimstughna','किंस्तुघ्न')];
+const RASHI=[[b('Mesha','मेष'),'♈'],[b('Vrishabha','वृषभ'),'♉'],[b('Mithuna','मिथुन'),'♊'],[b('Karka','कर्क'),'♋'],[b('Simha','सिंह'),'♌'],[b('Kanya','कन्या'),'♍'],[b('Tula','तुला'),'♎'],[b('Vrishchika','वृश्चिक'),'♏'],[b('Dhanu','धनु'),'♐'],[b('Makara','मकर'),'♑'],[b('Kumbha','कुम्भ'),'♒'],[b('Meena','मीन'),'♓']];
+const MONTH=[b('Chaitra','चैत्र'),b('Vaishakha','वैशाख'),b('Jyeshtha','ज्येष्ठ'),b('Ashadha','आषाढ़'),b('Shravana','श्रावण'),b('Bhadrapada','भाद्रपद'),b('Ashwin','आश्विन'),b('Kartik','कार्तिक'),b('Margashirsha','मार्गशीर्ष'),b('Pausha','पौष'),b('Magha','माघ'),b('Phalguna','फाल्गुन')];
+const RITU=[b('Vasant (spring)','वसंत'),b('Grishma (summer)','ग्रीष्म'),b('Varsha (monsoon)','वर्षा'),b('Sharad (autumn)','शरद'),b('Hemant (pre-winter)','हेमंत'),b('Shishir (winter)','शिशिर')];
+const PLANET={sun:b('Sun','सूर्य'),moon:b('Moon','चंद्र'),mars:b('Mars','मंगल'),mercury:b('Mercury','बुध'),jupiter:b('Jupiter','गुरु'),venus:b('Venus','शुक्र'),saturn:b('Saturn','शनि'),rahu:b('Rahu','राहु'),ketu:b('Ketu','केतु')};
+const HORA_GOOD={sun:'n',moon:'g',mars:'b',mercury:'g',jupiter:'g',venus:'g',saturn:'b'};
+const CHOG={udveg:[b('Udveg','उद्वेग'),'b'],char:[b('Char','चर'),'n'],labh:[b('Labh','लाभ'),'g'],amrit:[b('Amrit','अमृत'),'g'],kaal:[b('Kaal','काल'),'b'],shubh:[b('Shubh','शुभ'),'g'],rog:[b('Rog','रोग'),'b']};
+const SAMV='Prabhava,Vibhava,Shukla,Pramoda,Prajapati,Angirasa,Shrimukha,Bhava,Yuva,Dhatu,Ishvara,Bahudhanya,Pramathi,Vikrama,Vrisha,Chitrabhanu,Svabhanu,Tarana,Parthiva,Vyaya,Sarvajit,Sarvadhari,Virodhi,Vikriti,Khara,Nandana,Vijaya,Jaya,Manmatha,Durmukhi,Hevilambi,Vilambi,Vikari,Sharvari,Plava,Shubhakrit,Shobhakrit,Krodhi,Vishvavasu,Parabhava,Plavanga,Kilaka,Saumya,Sadharana,Virodhakrit,Paridhavi,Pramadicha,Ananda,Rakshasa,Nala,Pingala,Kalayukti,Siddharthi,Raudra,Durmati,Dundubhi,Rudhirodgari,Raktakshi,Krodhana,Akshaya'.split(',');
+const SAMV_HI='प्रभव,विभव,शुक्ल,प्रमोद,प्रजापति,अंगिरा,श्रीमुख,भाव,युवा,धाता,ईश्वर,बहुधान्य,प्रमाथी,विक्रम,वृष,चित्रभानु,स्वभानु,तारण,पार्थिव,व्यय,सर्वजित,सर्वधारी,विरोधी,विकृति,खर,नंदन,विजय,जय,मन्मथ,दुर्मुख,हेमलंबी,विलंबी,विकारी,शार्वरी,प्लव,शुभकृत,शोभकृत,क्रोधी,विश्वावसु,पराभव,प्लवंग,कीलक,सौम्य,साधारण,विरोधकृत,परिधावी,प्रमादी,आनंद,राक्षस,नल,पिंगल,कालयुक्त,सिद्धार्थी,रौद्र,दुर्मति,दुंदुभि,रुधिरोद्गारी,रक्ताक्षी,क्रोधन,अक्षय'.split(',');
+const EKA={ // [amanta month][paksha 0=shukla,1=krishna(purnimanta month)]
+ 0:[b('Kamada','कामदा'),b('Papmochani','पापमोचनी')],1:[b('Mohini','मोहिनी'),b('Varuthini','वरूथिनी')],2:[b('Nirjala','निर्जला'),b('Apara','अपरा')],
+ 3:[b('Devshayani','देवशयनी'),b('Yogini','योगिनी')],4:[b('Shravana Putrada','श्रावण पुत्रदा'),b('Kamika','कामिका')],5:[b('Parsva (Parivartini)','परिवर्तिनी'),b('Aja','अजा')],
+ 6:[b('Papankusha','पापांकुशा'),b('Indira','इंदिरा')],7:[b('Devutthana (Prabodhini)','देवउठनी'),b('Rama','रमा')],8:[b('Mokshada','मोक्षदा'),b('Utpanna','उत्पन्ना')],
+ 9:[b('Pausha Putrada','पौष पुत्रदा'),b('Saphala','सफला')],10:[b('Jaya','जया'),b('Shattila','षटतिला')],11:[b('Amalaki','आमलकी'),b('Vijaya','विजया')]};
+const CITIES=[
+ ['Delhi','दिल्ली',28.6139,77.2090],['Mumbai','मुंबई',19.0760,72.8777],['Kolkata','कोलकाता',22.5726,88.3639],['Chennai','चेन्नई',13.0827,80.2707],
+ ['Bengaluru','बेंगलुरु',12.9716,77.5946],['Hyderabad','हैदराबाद',17.3850,78.4867],['Ahmedabad','अहमदाबाद',23.0225,72.5714],['Pune','पुणे',18.5204,73.8567],
+ ['Jaipur','जयपुर',26.9124,75.7873],['Lucknow','लखनऊ',26.8467,80.9462],['Kanpur','कानपुर',26.4499,80.3319],['Patna','पटना',25.5941,85.1376],
+ ['Varanasi','वाराणसी',25.3176,82.9739],['Prayagraj','प्रयागराज',25.4358,81.8463],['Ayodhya','अयोध्या',26.7922,82.1998],['Mathura','मथुरा',27.4924,77.6737],
+ ['Haridwar','हरिद्वार',29.9457,78.1642],['Dehradun','देहरादून',30.3165,78.0322],['Chandigarh','चंडीगढ़',30.7333,76.7794],['Amritsar','अमृतसर',31.6340,74.8723],
+ ['Shimla','शिमला',31.1048,77.1734],['Srinagar','श्रीनगर',34.0837,74.7973],['Jammu','जम्मू',32.7266,74.8570],['Bhopal','भोपाल',23.2599,77.4126],
+ ['Indore','इंदौर',22.7196,75.8577],['Ujjain','उज्जैन',23.1765,75.7885],['Gwalior','ग्वालियर',26.2183,78.1828],['Nagpur','नागपुर',21.1458,79.0882],
+ ['Raipur','रायपुर',21.2514,81.6296],['Ranchi','रांची',23.3441,85.3096],['Bhubaneswar','भुवनेश्वर',20.2961,85.8245],['Puri','पुरी',19.8135,85.8312],
+ ['Guwahati','गुवाहाटी',26.1445,91.7362],['Surat','सूरत',21.1702,72.8311],['Vadodara','वडोदरा',22.3072,73.1812],['Dwarka','द्वारका',22.2442,68.9685],
+ ['Udaipur','उदयपुर',24.5854,73.7125],['Jodhpur','जोधपुर',26.2389,73.0243],['Agra','आगरा',27.1767,78.0081],['Noida','नोएडा',28.5355,77.3910],
+ ['Gurugram','गुरुग्राम',28.4595,77.0266],['Meerut','मेरठ',28.9845,77.7064],['Kochi','कोच्चि',9.9312,76.2673],['Thiruvananthapuram','तिरुवनंतपुरम',8.5241,76.9366],
+ ['Madurai','मदुरै',9.9252,78.1198],['Rameswaram','रामेश्वरम',9.2876,79.3129],['Tirupati','तिरुपति',13.6288,79.4192],['Visakhapatnam','विशाखापत्तनम',17.6868,83.2185],
+ ['Goa (Panaji)','गोवा (पणजी)',15.4909,73.8278],['Nashik','नासिक',19.9975,73.7898]];
+
+/* ===================== STATE & HELPERS ===================== */
+const store={get(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+const S=Object.assign({lang:'en',theme:'auto',view:'day',city:0,loc:null,tf:'12',msys:'purn',ffilter:'all',learn:'what'},store.get('panchang')||{});
+const now0=new Date();S.sel={y:now0.getFullYear(),m:now0.getMonth()+1,d:now0.getDate()};S.mon={y:S.sel.y,m:S.sel.m};S.fyear=S.sel.y;S.q='';
+const save=()=>store.set('panchang',{lang:S.lang,theme:S.theme,view:S.view,city:S.city,loc:S.loc,tf:S.tf,msys:S.msys,ffilter:S.ffilter,learn:S.learn});
+const tr=(k,v={})=>String(T[S.lang][k]??T.en[k]??k).replace(/\{(\w+)\}/g,(_,x)=>v[x]??'');
+const L=o=>o==null?'':(typeof o==='object'&&!Array.isArray(o)?(o[S.lang]??o.en):o);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function place(){if(S.loc)return S.loc;const c=CITIES[S.city]||CITIES[0];return {name:b(c[0],c[1]),lat:c[2],lon:c[3],tz:5.5};}
+const placeName=()=>L(place().name);
+const pad=n=>String(n).padStart(2,'0');
+const key=(y,m,d)=>`${y}-${pad(m)}-${pad(d)}`;
+function civil(jd,tz){const t=new Date((jd-2440587.5)*86400000+tz*3600000);return {y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate(),h:t.getUTCHours(),mi:t.getUTCMinutes()};}
+const MON_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],MON_HI=['जन','फ़र','मार्च','अप्रै','मई','जून','जुल','अग','सित','अक्टू','नव','दिस'];
+const MONF_EN=['January','February','March','April','May','June','July','August','September','October','November','December'],MONF_HI=['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'];
+const monS=m=>(S.lang==='hi'?MON_HI:MON_EN)[m-1], monF=m=>(S.lang==='hi'?MONF_HI:MONF_EN)[m-1];
+function fmt(jd,ref){ // time; adds date if not on reference civil day
+  if(jd==null)return '—';const p=place(),c=civil(jd+1/2880,p.tz);let s;
+  if(S.tf==='24')s=`${pad(c.h)}:${pad(c.mi)}`;else{const h=c.h%12||12;s=`${h}:${pad(c.mi)} ${c.h<12?'AM':'PM'}`;}
+  if(ref&&(c.d!==ref.d||c.m!==ref.m))s+=`, ${c.d} ${monS(c.m)}`;return s;}
+const dur=d=>{const mins=Math.round(d*1440);return `${Math.floor(mins/60)}h ${pad(mins%60)}m`;};
+const tithiName=i=>i===29?L(AMAVASYA):L(TITHI[i%15]);
+const tithiShort=i=>(S.lang==='hi'?(i<15?'शु ':'कृ '):(i<15?'S ':'K '))+(i===14?(S.lang==='hi'?'पूर्णिमा':'Purnima'):i===29?(S.lang==='hi'?'अमावस्या':'Amavasya'):(i%15+1));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),2200);}
+function moonSVG(e,size){ // e = elongation degrees
+  const r=45,cx=50,cy=50,rx=Math.abs(Math.cos(e*Math.PI/180))*r,wax=e<180;
+  const lit=wax?`M${cx},${cy-r} A${r},${r} 0 0 1 ${cx},${cy+r} A${rx},${r} 0 0 ${e<90?0:1} ${cx},${cy-r}Z`:`M${cx},${cy-r} A${r},${r} 0 0 0 ${cx},${cy+r} A${rx},${r} 0 0 ${e>270?1:0} ${cx},${cy-r}Z`;
+  return `<svg class="${size||'moon'}" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="mg${size||''}" cx="40%" cy="35%"><stop offset="0" stop-color="#fffbe8"/><stop offset="1" stop-color="#f3d27a"/></radialGradient></defs><circle cx="50" cy="50" r="45" fill="#3b3560"/><path d="${lit}" fill="url(#mg${size||''})"/></svg>`;}
+const illum=e=>Math.round((1-Math.cos(e*Math.PI/180))/2*100);
+
+/* ===================== FESTIVALS & VRATS ===================== */
+const qCache={};
+function quickDay(y,m,d){const p=place(),k=`${p.lat},${p.lon}|${key(y,m,d)}`;if(!qCache[k]){const q=PE.quick(y,m,d,p);q.tEve=Math.floor(PE.elong(q.ss+0.125)/12);qCache[k]=q;}return qCache[k];}
+function addDays(o,n){const t=new Date(Date.UTC(o.y,o.m-1,o.d+n));return {y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate()};}
+const vCache={};
+function vratsForYear(y){const p=place(),ck=`${p.lat},${p.lon}|${y}`;if(vCache[ck])return vCache[ck];
+  const out=[];let prev=quickDay(y-1,12,31);const start={y,m:1,d:1};
+  const rules=[ // [fieldName, tithiIndex, id]
+    ['tSr',10,'ekadashi'],['tSr',25,'ekadashi'],['tSr',14,'purnima'],['tSr',29,'amavasya'],['tSs',12,'pradosh'],['tSs',27,'pradosh'],
+    ['tEve',18,'sankashti'],['tMid',3,'vinayaka'],['tNight',28,'shivaratri'],['tSr',7,'durgashtami']];
+  for(let i=0;i<366;i++){const dt=addDays(start,i);if(dt.y!==y)break;const q=quickDay(dt.y,dt.m,dt.d);const nx=addDays(dt,1),qn=quickDay(nx.y,nx.m,nx.d);
+    for(const [f,t,id] of rules){
+      const was=prev[f],is=q[f],nxt=qn[f];
+      const hit=is===t&&was!==t;                                    // tithi present at the reference time
+      const skipped=was!==t&&is!==t&&((t-was+30)%30)<((is-was+30)%30)&&((is-was+30)%30)<15&&i>0; // kshaya — tithi passed between
+      if(hit)out.push({y:dt.y,m:dt.m,d:dt.d,id,t});else if(skipped){const pd=addDays(dt,-1);out.push({y:pd.y,m:pd.m,d:pd.d,id,t});}
+    }
+    if(q.sunR!==qn.sunR){ // sankranti between sunrises
+      const target=qn.sunR*30;const jd=PE.solve(PE.sunSid,target,q.sr+0.5,0.9856);
+      const dd=jd<q.ss?dt:nx;out.push({y:dd.y,m:dd.m,d:dd.d,id:'sankranti',r:qn.sunR,jd});}
+    prev=q;}
+  // name ekadashis / purnima / amavasya with lunar month
+  out.forEach(v=>{if(['ekadashi','purnima','amavasya'].includes(v.id)){const p2=place();const mid=PE.jdLocalMidnight(v.y,v.m,v.d,p2.tz)+0.3;const lm=PE.lunarMonth(mid);v.am=lm.amanta;v.adhik=lm.adhik;}});
+  return vCache[ck]=out.filter(v=>v.y===y);}
+function vratLabel(v){
+  if(v.id==='ekadashi'){const pk=v.t<15?0:1;const nm=v.adhik?(pk?b('Parama','परमा'):b('Padmini','पद्मिनी')):EKA[v.am][pk];return `${L(nm)} ${tr('ekadashi')}`;}
+  if(v.id==='sankranti')return `${L(RASHI[v.r][0])} ${tr('sankranti')}`;
+  if(v.id==='purnima'||v.id==='amavasya')return `${L(MONTH[S.msys==='purn'&&v.id==='amavasya'?(v.am+1)%12:v.am])} ${tr(v.id)}`;
+  return tr(v.id);}
+const FEST_ICON={major:'🪔',vrat:'🙏',national:'🇮🇳',other:'🕊️',jayanti:'🌼',regional:'🎊'};
+const OTHER=['eid','christmas','good-friday','easter','muharram','milad','guru-nanak','guru-gobind','guru-tegh','mahavir','buddha','ravidas','baisakhi'];
+function festType(f){return f.type==='national'?'national':OTHER.some(x=>f.id.includes(x))?'other':(f.type==='vrat'?'vrat':'major');}
+function eventsOn(y,m,d){const k=key(y,m,d);const fs=(FEST.festivals||[]).filter(f=>f.date===k).map(f=>({kind:festType(f),name:L(f),f,icon:(INFO[f.id]&&INFO[f.id].icon)||FEST_ICON[festType(f)]}));
+  const vs=vratsForYear(y).filter(v=>v.y===y&&v.m===m&&v.d===d).map(v=>({kind:'vrat',name:vratLabel(v),v,icon:v.id==='sankranti'?'☀️':v.id==='purnima'?'🌕':v.id==='amavasya'?'🌑':'🙏'}));
+  const KW={ekadashi:'ekadashi',purnima:'purnima',amavasya:'amavasya',sankranti:'sankranti',sankashti:'chauth',shivaratri:'shivaratri',durgashtami:'durga-ashtami',vinayaka:'ganesh-chaturthi'};
+  return fs.concat(vs.filter(v=>!fs.some(f=>KW[v.v.id]&&f.f.id.includes(KW[v.v.id]))));}
+
+/* ===================== RENDER: SHELL ===================== */
+function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delete r.dataset.theme;else r.dataset.theme=S.theme;}
+function renderShell(){document.documentElement.lang=S.lang;document.title=S.lang==='hi'?'पंचांग कैलेंडर':'Panchang Calendar';
+  $('#appName').textContent=tr('appName');$('#tagline').textContent=tr('tagline')+' · '+placeName();$('#langBtn').textContent=tr('langBtn');$('#disclaimer').textContent=tr('disclaimer');
+  $('#mainNav').innerHTML=['day','month','fest','learn'].map(v=>`<button data-v="${v}" class="${S.view===v?'on':''}" aria-selected="${S.view===v}">${tr(v)}</button>`).join('');
+  $('#options').innerHTML=`<div class="opt"><span class="lbl">${tr('language')}</span><div class="seg" id="langSeg"><button data-v="en" class="${S.lang==='en'?'on':''}">English</button><button data-v="hi" class="${S.lang==='hi'?'on':''}">हिंदी</button></div></div>
+   <div class="opt"><label class="lbl" for="citySel">${tr('city')}</label><select id="citySel">${S.loc?`<option value="loc" selected>📍 ${esc(L(S.loc.name))}</option>`:''}${CITIES.map((c,i)=>`<option value="${i}" ${!S.loc&&S.city===i?'selected':''}>${S.lang==='hi'?c[1]:c[0]}</option>`).join('')}</select><button class="btn sm" id="locBtn" style="margin-top:4px">${tr('myLoc')}</button></div>
+   <div class="opt"><span class="lbl">${tr('theme')}</span><div class="seg" id="themeSeg">${['light','dark','auto'].map(t=>`<button data-v="${t}" class="${S.theme===t?'on':''}">${tr(t)}</button>`).join('')}</div></div>
+   <div class="opt"><span class="lbl">${tr('timeFmt')}</span><div class="seg" id="tfSeg"><button data-v="12" class="${S.tf==='12'?'on':''}">${tr('h12')}</button><button data-v="24" class="${S.tf==='24'?'on':''}">${tr('h24')}</button></div></div>
+   <div class="opt"><span class="lbl">${tr('monthSys')}</span><div class="seg" id="msSeg"><button data-v="purn" class="${S.msys==='purn'?'on':''}">${tr('purn')}</button><button data-v="aman" class="${S.msys==='aman'?'on':''}">${tr('aman')}</button></div></div>`;}
+function render(){renderShell();$('#app').innerHTML=`<div class="view">${S.view==='day'?viewDay():S.view==='month'?viewMonth():S.view==='fest'?viewFest():viewLearn()}</div>`;}
+
+/* ===================== DAY VIEW ===================== */
+function isToday(o){const n=new Date();return o.y===n.getFullYear()&&o.m===n.getMonth()+1&&o.d===n.getDate();}
+function nowJd(){return PE.jdFromDate(new Date());}
+function viewDay(){const {y,m,d}=S.sel;const P=PE.day(y,m,d,place());const ref={y,m,d};const tNow=isToday(ref)?nowJd():null;
+  const lunarMonthIdx=S.msys==='purn'?P.purnimanta:P.amanta;
+  const head=`<section class="card dnav dnav-mobile noprint"><button class="btn" data-step="-1" aria-label="${tr('prev')}">◀</button>
+     <div class="mid"><b>${T[S.lang].wd[P.wd]}, ${d} ${monF(m)}</b><span>${L(MONTH[lunarMonthIdx])}${P.adhik?' ('+tr('adhik')+')':''} · ${P.paksha==='shukla'?tr('shukla'):tr('krishna')} · ${placeName()}</span></div>
+     <button class="btn" data-step="1" aria-label="${tr('next')}">▶</button></section>
+    <div class="dnav-tools dnav-mobile noprint">${isToday(ref)?'':`<button class="btn sm" id="todayBtn">${tr('today')}</button>`}<input type="date" id="dateIn" value="${key(y,m,d)}" aria-label="${tr('goto')}"></div>`;
+  const evs=eventsOn(y,m,d);
+  const t0=P.tithis[0];
+  const hero=`<section class="card hero">${moonSVG(P.moonPhase)}
+    <div class="tname">${P.paksha==='shukla'?tr('shukla'):tr('krishna')} ${tithiName(t0.idx)}</div>
+    <div class="tmeta">${tr('tithi')} ${tr('till')} ${fmt(t0.end,ref)} · ${tr('illum')} ${illum(P.moonPhase)}%</div>
+    <div class="tmeta">${L(MONTH[lunarMonthIdx])} ${tr('vikram')} ${P.vikram} · ${T[S.lang].wd[P.wd]}</div>
+    <div class="festbar">${evs.length?evs.map(e=>`<button class="fchip ${e.kind==='vrat'?'vrat':e.kind==='national'?'nat':''}" data-fest="${e.f?e.f.id+'|'+e.f.date:''}">${e.icon} ${esc(e.name)}</button>`).join(''):`<span class="sub">${tr('none')}</span>`}</div></section>`;
+  const segRows=(list,label,icon,nameFn,extraFn)=>list.map((s,i)=>`<div class="el ${i?'next':''}"><div class="ic">${icon}</div><div><small>${i?tr('then'):label}</small><b>${nameFn(s)}</b>${extraFn?`<em>${extraFn(s)}</em>`:''}</div><div class="tm">${s.end<P.nextSunrise?`${tr('upto')} ${fmt(s.end,ref)}`:`${fmt(s.end,ref)}`}<span>${s.end>=P.nextSunrise?tr('fullnight'):''}</span></div></div>`).join('');
+  const five=`<section class="card"><h2>🪔 ${S.lang==='hi'?'पंचांग':'Panchang'} <small>${placeName()}</small></h2>
+    ${segRows(P.tithis,tr('tithi'),'🌙',s=>`${s.idx<15?tr('shukla'):tr('krishna')} ${tithiName(s.idx)}`,s=>`${L(TITHI_DEITY[s.idx%15])} · ${L(TITHI_GROUP[s.idx%5])}`)}
+    ${segRows(P.naks,tr('nak'),'✨',s=>L(NAK[s.idx][0]),s=>`${L(PLANET[NAK[s.idx][1]])} · ${L(NAK[s.idx][2])}`)}
+    ${segRows(P.yogas,tr('yoga'),'🧘',s=>L(YOGA[s.idx])+(YOGA_BAD.includes(s.idx)?`<span class="tag b">✗</span>`:`<span class="tag g">✓</span>`),s=>L(YOGA_MEAN[s.idx]))}
+    ${segRows(P.karanas.slice(0,3),tr('karana'),'🔱',s=>L(KARANA[s.name])+(s.name===6?`<span class="tag b">${tr('karanaBad')}</span>`:''))}
+    <div class="el"><div class="ic">📆</div><div><small>${tr('vara')}</small><b>${T[S.lang].varas[P.wd]}</b><em>${L(PLANET[['sun','moon','mars','mercury','jupiter','venus','saturn'][P.wd]])}</em></div><div class="tm"></div></div></section>`;
+  const sm=`<section class="card"><h2>☀️ ${tr('sunmoon')}</h2><div class="sm">
+     <div><span>🌅</span><b>${fmt(P.sunrise,ref)}</b><small>${tr('sunrise')}</small></div><div><span>🌇</span><b>${fmt(P.sunset,ref)}</b><small>${tr('sunset')}</small></div>
+     <div><span>🌙</span><b>${P.moonrise?fmt(P.moonrise,ref):tr('noMoon')}</b><small>${tr('moonrise')}</small></div><div><span>🌘</span><b>${P.moonset?fmt(P.moonset,ref):tr('noMoon')}</b><small>${tr('moonset')}</small></div></div>
+     <dl class="kv" style="margin-top:10px"><dt>${tr('dayLen')}</dt><dd>${dur(P.dayLen)}</dd><dt>${tr('nightLen')}</dt><dd>${dur(P.nightLen)}</dd>
+     <dt>${tr('moonSign')}</dt><dd>${P.moonRashis.map((r,i)=>`${RASHI[r.idx][1]} ${L(RASHI[r.idx][0])}${r.end<P.nextSunrise?` ${tr('upto')} ${fmt(r.end,ref)}`:''}`).join(` → `)}</dd>
+     <dt>${tr('sunSign')}</dt><dd>${RASHI[P.sunRashi.idx][1]} ${L(RASHI[P.sunRashi.idx][0])}</dd><dt>${tr('sunNak')}</dt><dd>${L(NAK[P.sunNak][0])}</dd></dl></section>`;
+  const si=((P.shaka+11)%60+60)%60;
+  const cal=`<section class="card"><h2>📜 ${tr('calInfo')}</h2><dl class="kv">
+     <dt>${tr('vikram')}</dt><dd>${P.vikram}</dd><dt>${tr('shaka')}</dt><dd>${P.shaka}</dd><dt>${tr('samvatsara')}</dt><dd>${S.lang==='hi'?SAMV_HI[si]:SAMV[si]}</dd>
+     <dt>${tr('amantaM')}</dt><dd>${L(MONTH[P.amanta])}${P.adhik?` <span class="tag n">${tr('adhik')}</span>`:''}</dd><dt>${tr('purnimantaM')}</dt><dd>${L(MONTH[P.purnimanta])}</dd>
+     <dt>${tr('paksha')}</dt><dd>${P.paksha==='shukla'?tr('shukla'):tr('krishna')}</dd><dt>${tr('ritu')}</dt><dd>${L(RITU[P.ritu])}</dd><dt>${tr('ayana')}</dt><dd>${tr(P.ayana)}</dd>
+     <dt>${tr('dishashool')}</dt><dd>${T[S.lang].dirs[P.wd]}</dd><dt>${tr('ayanamsa')}</dt><dd>${P.ayanamsa.toFixed(4)}°</dd></dl></section>`;
+  const isNow=(s)=>tNow&&tNow>=s.start&&tNow<s.end?' isnow':'';
+  const muh=`<section class="card"><h2>⏰ ${tr('muhurat')}</h2>
+    <h3 class="good">✓ ${tr('good')}</h3>
+    <div class="mu${isNow(P.brahma)}"><b>🕉️ ${tr('brahma')}</b><span class="t">${fmt(P.brahma.start,ref)} – ${fmt(P.brahma.end,ref)}</span></div>
+    <div class="mu${isNow(P.abhijit)}"><b>☀️ ${tr('abhijit')}${P.wd===3?` <span class="tag n">${tr('abhNoteWed')}</span>`:''}</b><span class="t">${fmt(P.abhijit.start,ref)} – ${fmt(P.abhijit.end,ref)}</span></div>
+    <div class="mu${isNow(P.godhuli)}"><b>🐄 ${tr('godhuli')}</b><span class="t">${fmt(P.godhuli.start,ref)} – ${fmt(P.godhuli.end,ref)}</span></div>
+    <div class="mu${isNow(P.nishita)}"><b>🌌 ${tr('nishita')}</b><span class="t">${fmt(P.nishita.start,ref)} – ${fmt(P.nishita.end,ref)}</span></div>
+    <h3 class="bad">✗ ${tr('bad')}</h3>
+    <div class="mu${isNow(P.rahu)}"><b>🐍 ${tr('rahu')}</b><span class="t">${fmt(P.rahu.start,ref)} – ${fmt(P.rahu.end,ref)}</span></div>
+    <div class="mu${isNow(P.yama)}"><b>⚔️ ${tr('yama')}</b><span class="t">${fmt(P.yama.start,ref)} – ${fmt(P.yama.end,ref)}</span></div>
+    <div class="mu${isNow(P.gulika)}"><b>🪨 ${tr('gulika')}</b><span class="t">${fmt(P.gulika.start,ref)} – ${fmt(P.gulika.end,ref)}</span></div>
+    ${P.karanas.filter(k=>k.name===6).map(k=>`<div class="mu"><b>⚠️ ${L(KARANA[6])}</b><span class="t">${fmt(Math.max(k.start,P.sunrise),ref)} – ${fmt(Math.min(k.end,P.nextSunrise),ref)}</span></div>`).join('')}
+  </section>`;
+  // timeline 00:00..24:00 local
+  const day0=PE.jdLocalMidnight(y,m,d,place().tz),pct=j=>Math.max(0,Math.min(100,(j-day0)*100));
+  const blk=(s,cls,lbl)=>`<div class="blk ${cls}" style="left:${pct(s.start)}%;width:${pct(s.end)-pct(s.start)}%" title="${lbl}">${lbl}</div>`;
+  const tl=`<section class="card wide"><h2>🕰️ ${tr('timeline')}</h2><div class="tline"><div class="dayp" style="left:${pct(P.sunrise)}%;width:${pct(P.sunset)-pct(P.sunrise)}%"></div>
+     ${[3,6,9,12,15,18,21].map(h=>`<span class="hr" style="left:${h/24*100}%">${S.tf==='24'?h:(h%12||12)+(h<12?'a':'p')}</span>`).join('')}
+     ${blk(P.rahu,'rahu','')}${blk(P.yama,'yama','')}${blk(P.gulika,'guli','')}${blk(P.abhijit,'abh','')}${tNow?`<div class="now" style="left:${pct(tNow)}%"></div>`:''}</div>
+     <div class="tlegend"><span><i style="background:#ffd58a"></i>${tr('sunrise')}–${tr('sunset')}</span><span><i style="background:var(--red)"></i>${tr('tlRahu')}</span><span><i style="background:#a0522d"></i>${tr('tlYama')}</span><span><i style="background:#6d6d6d"></i>${tr('tlGuli')}</span><span><i style="background:var(--green)"></i>${tr('tlAbh')}</span>${tNow?`<span><i style="background:var(--accent)"></i>${tr('tlNow')}</span>`:''}</div></section>`;
+  const chg=`<section class="card"><h2>🎯 ${tr('chog')}</h2><h3>☀️ ${tr('chDay')}</h3><div class="chg">${P.choghadiya.filter(c=>!c.night).map(c=>`<div class="ch ${CHOG[c.type][1]}${isNow(c)}"><b>${L(CHOG[c.type][0])}</b><span>${fmt(c.start,ref)} – ${fmt(c.end,ref)}</span></div>`).join('')}</div>
+     <h3>🌙 ${tr('chNight')}</h3><div class="chg">${P.choghadiya.filter(c=>c.night).map(c=>`<div class="ch ${CHOG[c.type][1]}${isNow(c)}"><b>${L(CHOG[c.type][0])}</b><span>${fmt(c.start,ref)} – ${fmt(c.end,ref)}</span></div>`).join('')}</div></section>`;
+  const hora=`<section class="card"><h2>🪐 ${tr('hora')}</h2><div class="hora">${P.hora.map(h=>`<div class="${isNow(h).trim()}"><span class="${HORA_GOOD[h.lord]==='g'?'good':HORA_GOOD[h.lord]==='b'?'bad':''}">${L(PLANET[h.lord])}</span><span>${fmt(h.start,ref)}</span></div>`).join('')}</div></section>`;
+  const acts=`<div class="noprint" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="shareBtn">${tr('copy')}</button><button class="btn" id="printBtn">${tr('print')}</button></div>`;
+  return `<div class="dash"><aside class="side noprint">${sideCal()}${sideUpcoming()}</aside>
+    <div class="main">${head}${hero}<div class="cards2">${five}${muh}${tl}${sm}${cal}</div>${acts}</div>
+    <div class="aside">${chg}${hora}</div></div>`;}
+function shareText(){const {y,m,d}=S.sel;const P=PE.day(y,m,d,place());const ref={y,m,d};
+  return [`🪔 ${tr('appName')} — ${T[S.lang].wd[P.wd]}, ${d} ${monF(m)} ${y} (${placeName()})`,`${tr('tithi')}: ${P.paksha==='shukla'?tr('shukla'):tr('krishna')} ${tithiName(P.tithis[0].idx)} ${tr('upto')} ${fmt(P.tithis[0].end,ref)}`,
+   `${tr('nak')}: ${L(NAK[P.naks[0].idx][0])} ${tr('upto')} ${fmt(P.naks[0].end,ref)}`,`${tr('yoga')}: ${L(YOGA[P.yogas[0].idx])} · ${tr('karana')}: ${L(KARANA[P.karanas[0].name])}`,
+   `${tr('sunrise')} ${fmt(P.sunrise,ref)} · ${tr('sunset')} ${fmt(P.sunset,ref)}`,`${tr('rahu')}: ${fmt(P.rahu.start,ref)} – ${fmt(P.rahu.end,ref)}`,`${tr('abhijit')}: ${fmt(P.abhijit.start,ref)} – ${fmt(P.abhijit.end,ref)}`,
+   ...eventsOn(y,m,d).map(e=>`${e.icon} ${e.name}`)].join('\n');}
+
+/* ===================== MONTH ===================== */
+function monthCells(y,m,mini){const first=new Date(Date.UTC(y,m-1,1)).getUTCDay(),days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  let h=T[S.lang].wds.map((w,i)=>`<div class="wd ${i===0?'sun':''}">${mini?w.slice(0,S.lang==='hi'?3:2):w}</div>`).join('')+'<div class="day blank"></div>'.repeat(first);
+  for(let d=1;d<=days;d++){const q=quickDay(y,m,d);const ev=eventsOn(y,m,d);const wd=(first+d-1)%7;const sel=S.sel.y===y&&S.sel.m===m&&S.sel.d===d;
+    const showMoon=q.tSr===14||q.tSr===29||q.tSr===7||q.tSr===22;
+    h+=`<button class="day ${wd===0?'sun':''} ${isToday({y,m,d})?'today':''} ${sel?'sel':''}" data-date="${key(y,m,d)}" title="${esc(ev.map(e=>e.name).join(', '))}">
+      <span class="dn">${d}</span><span class="ti">${tithiShort(q.tSr)}</span>${showMoon?moonSVG(q.phase,'mo'):''}
+      ${ev.slice(0,2).map(e=>`<span class="fe ${e.kind==='vrat'?'v':''}">${e.icon} ${esc(e.name)}</span>`).join('')}
+      <span class="dots">${ev.slice(0,4).map(e=>`<i class="${e.kind==='vrat'?'v':e.kind==='national'?'n':''}"></i>`).join('')}</span></button>`;}
+  return h;}
+function lunarSpan(y,m){const p=place();const mi=d=>{const q=quickDay(y,m,d);const lm=PE.lunarMonth(q.sr);return S.msys==='purn'&&q.tSr>=15?(lm.amanta+1)%12:lm.amanta;};
+  const a=mi(1),z=mi(new Date(Date.UTC(y,m,0)).getUTCDate());return a===z?L(MONTH[a]):`${L(MONTH[a])} – ${L(MONTH[z])}`;}
+function sideCal(){const {y,m}=S.mon;return `<section class="card mini"><div class="mhead"><button class="btn sm" data-mstep="-1">◀</button><b>${monF(m)} ${y}<small>${lunarSpan(y,m)}</small></b><button class="btn sm" data-mstep="1">▶</button></div>
+   <div class="grid">${monthCells(y,m,true)}</div><div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap">${isToday(S.sel)?'':`<button class="btn sm" id="todayBtn2">${tr('today')}</button>`}<input type="date" id="dateIn2" value="${key(S.sel.y,S.sel.m,S.sel.d)}"></div></section>`;}
+function upcoming(n){const t=new Date(),k=key(t.getFullYear(),t.getMonth()+1,t.getDate());return (FEST.festivals||[]).filter(f=>f.date>=k&&festType(f)!=='other').slice(0,n);}
+function daysUntil(ds){const [y,m,d]=ds.split('-').map(Number);const t=new Date();return Math.round((Date.UTC(y,m-1,d)-Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()))/86400000);}
+const countTxt=n=>n===0?tr('isToday'):n===1?tr('tomorrow'):n>0?tr('inDays',{n}):tr('ago',{n:-n});
+function sideUpcoming(){const up=upcoming(8);return `<section class="card"><h2>🎉 ${tr('nextFest')}</h2>${up.map(f=>{const [y,m,d]=f.date.split('-').map(Number);return `<div class="mu" style="cursor:pointer" data-date="${f.date}"><b>${(INFO[f.id]&&INFO[f.id].icon)||'🪔'} ${esc(L(f))}</b><span class="t sub">${d} ${monS(m)} · ${countTxt(daysUntil(f.date))}</span></div>`;}).join('')}</section>`;}
+function viewMonth(){const {y,m}=S.mon;const days=new Date(Date.UTC(y,m,0)).getUTCDate();const list=[];for(let d=1;d<=days;d++)eventsOn(y,m,d).forEach(e=>list.push({d,e}));
+  return `<section class="card"><div class="mhead"><button class="btn" data-mstep="-1">◀</button><b>${monF(m)} ${y}<small>${lunarSpan(y,m)} · ${placeName()}</small></b><button class="btn" data-mstep="1">▶</button></div>
+   <div class="grid">${monthCells(y,m,false)}</div></section>
+   <section class="card"><h2>📋 ${tr('monthFest')}</h2>${list.length?list.map(({d,e})=>`<div class="mu" style="cursor:pointer" data-date="${key(y,m,d)}"><b>${e.icon} ${esc(e.name)}</b><span class="t sub">${d} ${monS(m)} · ${T[S.lang].wds[new Date(Date.UTC(y,m-1,d)).getUTCDay()]}</span></div>`).join(''):`<p class="sub">${tr('noFest')}</p>`}</section>`;}
+
+/* ===================== FESTIVALS ===================== */
+function festDetail(f){const I=INFO[f.id];const [y,m,d]=f.date.split('-').map(Number);let pan='';
+  try{const q=quickDay(y,m,d);const lm=PE.lunarMonth(q.sr);const pk=q.tSr<15?0:1;const mi=S.msys==='purn'&&pk?(lm.amanta+1)%12:lm.amanta;pan=`${L(MONTH[mi])} ${pk?tr('krishna'):tr('shukla')} ${tithiName(q.tSr)} · ${L(NAK[q.nak][0])}`;}catch(e){}
+  return `<div class="fbody">${I?`<p><b>📖 ${tr('story')}:</b> ${L(I.story)}</p><p><b>🎊 ${tr('howTo')}:</b> ${L(I.how)}</p>${I.food?`<p><b>🍲 ${tr('foods')}:</b> ${L(I.food)}</p>`:''}`:''}
+    ${f.note?`<p class="sub">ℹ️ ${esc(f.note)}</p>`:''}<p class="sub">🪔 ${tr('tithiOn')} (${placeName()}): ${pan}</p><button class="btn sm" data-date="${f.date}">📅 ${tr('day')}</button></div>`;}
+function viewFest(){const y=S.fyear;const k=key(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate());
+  const fests=(FEST.festivals||[]).filter(f=>f.date.startsWith(y+'-')).map(f=>({date:f.date,kind:festType(f),name:L(f),f}));
+  const KW={ekadashi:'ekadashi',purnima:'purnima',amavasya:'amavasya',sankranti:'sankranti',sankashti:'chauth',shivaratri:'shivaratri',durgashtami:'durga-ashtami',vinayaka:'ganesh-chaturthi'};
+  const vr=vratsForYear(y).map(v=>({date:key(v.y,v.m,v.d),kind:'vrat',name:vratLabel(v),v})).filter(x=>!fests.some(f=>f.date===x.date&&KW[x.v.id]&&f.f.id.includes(KW[x.v.id])));
+  let all=fests.concat(vr).sort((a,b2)=>a.date<b2.date?-1:a.date>b2.date?1:0);
+  const curY=y===new Date().getFullYear();const hidden=curY&&!S.past?all.filter(x=>x.date<k).length:0;if(hidden)all=all.filter(x=>x.date>=k);
+  const flt=S.ffilter;if(flt!=='all')all=all.filter(x=>x.kind===flt);
+  if(S.q)all=all.filter(x=>x.name.toLowerCase().includes(S.q.toLowerCase())||(x.f&&(x.f.en+' '+x.f.hi).toLowerCase().includes(S.q.toLowerCase())));
+  const nxt=upcoming(1)[0];
+  const years=[...new Set((FEST.festivals||[]).map(f=>+f.date.slice(0,4)))];if(!years.includes(y))years.push(y);
+  let lastM=0,html='';
+  for(const x of all){const [yy,m,d]=x.date.split('-').map(Number);if(m!==lastM){html+=`<div class="fm">${monF(m)} ${yy}</div>`;lastM=m;}
+    const n=daysUntil(x.date);const ic=x.f?((INFO[x.f.id]&&INFO[x.f.id].icon)||FEST_ICON[x.kind]):(x.v.id==='sankranti'?'☀️':x.v.id==='purnima'?'🌕':x.v.id==='amavasya'?'🌑':'🙏');
+    html+=`<details class="fe"${x.date===k?' open':''}><summary><div class="fdate"><b>${d}</b><small>${T[S.lang].wds[new Date(Date.UTC(yy,m-1,d)).getUTCDay()]}</small></div><div class="fname"><b>${ic} ${esc(x.name)}</b><em>${x.f&&S.lang==='en'?esc(x.f.hi):x.f?esc(x.f.en):''}</em></div><div class="fcount">${countTxt(n)}</div></summary>
+      ${x.f?festDetail(x.f):`<div class="fbody"><p>${L(VRAT_INFO[x.v.id])}</p><button class="btn sm" data-date="${x.date}">📅 ${tr('day')}</button></div>`}</details>`;}
+  return `${nxt?`<section class="card nextf"><div class="em">${(INFO[nxt.id]&&INFO[nxt.id].icon)||'🪔'}</div><div class="sub">${tr('nextFest')}</div><div class="cd">${esc(L(nxt))} · ${countTxt(daysUntil(nxt.date))}</div><div class="sub">${(()=>{const [a,bb,c]=nxt.date.split('-').map(Number);return `${T[S.lang].wd[new Date(Date.UTC(a,bb-1,c)).getUTCDay()]}, ${c} ${monF(bb)} ${a}`;})()}</div></section>`:''}
+   <section class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px"><select id="fYear" aria-label="${tr('year')}">${years.sort().map(v=>`<option ${v===y?'selected':''}>${v}</option>`).join('')}</select>
+     <input id="fSearch" type="search" placeholder="${tr('search')}" value="${esc(S.q)}" style="flex:1;min-width:160px"></div>
+    <div class="chips" id="fChips">${['all','major','vrat','national','other'].map(c=>`<button class="chip ${S.ffilter===c?'on':''}" data-f="${c}">${tr(c)}</button>`).join('')}</div>
+    ${hidden?`<button class="btn sm" id="pastBtn" style="margin-top:8px">⬆ ${tr('showPast',{n:hidden})}</button>`:''}<div class="flist">${html||`<p class="sub">${tr('noFest')}</p>`}</div></section>`;}
+
+/* ===================== LEARN ===================== */
+function viewLearn(){const tabs=['what','tithi','nak','yoga','muh','how'];const lab={what:'lWhat',tithi:'lTithi',nak:'lNak',yoga:'lYoga',muh:'lMuh',how:'lHow'};
+  return `<nav class="seg subnav" id="learnNav">${tabs.map(t=>`<button data-v="${t}" class="${S.learn===t?'on':''}">${tr(lab[t])}</button>`).join('')}</nav><section class="card learn">${LEARN[S.learn]()}</section>`;}
+const LEARN={
+ what:()=>L(LEARN_TXT.what),
+ tithi:()=>`${L(LEARN_TXT.tithi)}<div class="tablewrap"><table><tr><th>#</th><th>${tr('tithi')}</th><th>${S.lang==='hi'?'देवता':'Deity'}</th><th>${S.lang==='hi'?'वर्ग':'Group'}</th></tr>${TITHI.map((t,i)=>`<tr><td>${i+1}</td><td><b>${L(t)}</b>${i===14?' / '+L(AMAVASYA):''}</td><td>${L(TITHI_DEITY[i])}</td><td>${L(TITHI_GROUP[i%5])}</td></tr>`).join('')}</table></div>`,
+ nak:()=>`${L(LEARN_TXT.nak)}<div class="tablewrap"><table><tr><th>#</th><th>${tr('nak')}</th><th>${S.lang==='hi'?'स्वामी':'Lord'}</th><th>${S.lang==='hi'?'देवता':'Deity'}</th><th>${S.lang==='hi'?'प्रतीक':'Symbol'}</th><th>${S.lang==='hi'?'राशि':'Sign'}</th></tr>${NAK.map((n,i)=>`<tr><td>${i+1}</td><td><b>${L(n[0])}</b></td><td>${L(PLANET[n[1]])}</td><td>${L(n[2])}</td><td>${L(n[3])}</td><td>${L(RASHI[Math.floor(i*4/9)][0])}${(i*4)%9>5?' / '+L(RASHI[Math.floor((i*4+3)/9)][0]):''}</td></tr>`).join('')}</table></div>`,
+ yoga:()=>`${L(LEARN_TXT.yoga)}<div class="tablewrap"><table><tr><th>#</th><th>${tr('yoga')}</th><th>${S.lang==='hi'?'अर्थ':'Meaning'}</th><th></th></tr>${YOGA.map((t,i)=>`<tr><td>${i+1}</td><td><b>${L(t)}</b></td><td>${L(YOGA_MEAN[i])}</td><td>${YOGA_BAD.includes(i)?'<span class="tag b">✗</span>':'<span class="tag g">✓</span>'}</td></tr>`).join('')}</table></div>
+   ${L(LEARN_TXT.karana)}<div class="tablewrap"><table><tr><th>#</th><th>${tr('karana')}</th><th>${S.lang==='hi'?'प्रकार':'Type'}</th></tr>${KARANA.map((k,i)=>`<tr><td>${i+1}</td><td><b>${L(k)}</b></td><td>${i<7?(S.lang==='hi'?'चर (हर महीने 8 बार)':'Movable (8 times a month)'):(S.lang==='hi'?'स्थिर (महीने में एक बार)':'Fixed (once a month)')}${i===6?' · '+tr('karanaBad'):''}</td></tr>`).join('')}</table></div>`,
+ muh:()=>L(LEARN_TXT.muh)+`<div class="tablewrap"><table><tr><th>${tr('chog')}</th><th>${S.lang==='hi'?'स्वामी':'Ruler'}</th><th></th></tr>${[['amrit','moon'],['shubh','jupiter'],['labh','mercury'],['char','venus'],['udveg','sun'],['rog','mars'],['kaal','saturn']].map(([c,p])=>`<tr><td><b>${L(CHOG[c][0])}</b></td><td>${L(PLANET[p])}</td><td>${CHOG[c][1]==='g'?'<span class="tag g">✓</span>':CHOG[c][1]==='b'?'<span class="tag b">✗</span>':'<span class="tag n">~</span>'}</td></tr>`).join('')}</table></div>`,
+ how:()=>L(LEARN_TXT.how)
+};
+
+/* ===================== EVENTS ===================== */
+function setDate(o){S.sel={y:o.y,m:o.m,d:o.d};S.mon={y:o.y,m:o.m};}
+document.addEventListener('click',e=>{const t=e.target.closest('button,[data-date]');if(!t)return;
+  if(t.id==='langBtn'){S.lang=S.lang==='en'?'hi':'en';save();render();return;}
+  if(t.id==='optBtn'){const o=$('#options');o.classList.toggle('open');t.setAttribute('aria-expanded',o.classList.contains('open'));return;}
+  if(t.closest('#langSeg')){S.lang=t.dataset.v;save();render();$('#options').classList.add('open');return;}
+  if(t.closest('#themeSeg')){S.theme=t.dataset.v;applyTheme();save();renderShell();$('#options').classList.add('open');return;}
+  if(t.closest('#tfSeg')){S.tf=t.dataset.v;save();render();$('#options').classList.add('open');return;}
+  if(t.closest('#msSeg')){S.msys=t.dataset.v;save();render();$('#options').classList.add('open');return;}
+  if(t.closest('#mainNav')){S.view=t.dataset.v;save();render();window.scrollTo({top:0});return;}
+  if(t.closest('#learnNav')){S.learn=t.dataset.v;save();render();return;}
+  if(t.closest('#fChips')){S.ffilter=t.dataset.f;save();render();return;}
+  if(t.dataset.step){setDate(addDays(S.sel,+t.dataset.step));render();return;}
+  if(t.dataset.mstep){const mm=S.mon.m+ +t.dataset.mstep;S.mon={y:S.mon.y+(mm>12?1:mm<1?-1:0),m:(mm+11)%12+1};render();return;}
+  if(t.dataset.date){const [y,m,d]=t.dataset.date.split('-').map(Number);setDate({y,m,d});S.view='day';save();render();if(innerWidth<1100)window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(t.dataset.fest!==undefined){S.view='fest';S.fyear=S.sel.y;S.q='';S.ffilter='all';render();const id=t.dataset.fest;if(id){const el=[...document.querySelectorAll('details.fe')].find(d=>d.querySelector(`[data-date="${id.split('|')[1]}"]`)&&d.textContent.includes(t.textContent.slice(3).trim()));if(el){el.open=true;el.scrollIntoView({block:'center'});}}else{const vt=t.textContent.slice(2).trim();const el=[...document.querySelectorAll('details.fe')].find(d=>d.textContent.includes(vt));if(el){el.open=true;el.scrollIntoView({block:'center'});}}return;}
+  switch(t.id){
+    case 'todayBtn':case 'todayBtn2':{const n=new Date();setDate({y:n.getFullYear(),m:n.getMonth()+1,d:n.getDate()});render();break;}
+    case 'shareBtn':{const txt=shareText();(navigator.share?navigator.share({title:tr('appName'),text:txt}):navigator.clipboard.writeText(txt).then(()=>toast(tr('copied')))).catch(()=>{});break;}
+    case 'printBtn':window.print();break;
+    case 'pastBtn':S.past=true;render();break;
+    case 'locBtn':{if(!navigator.geolocation){toast(tr('locFail'));break;}toast(tr('locating'));navigator.geolocation.getCurrentPosition(pos=>{const tz=-new Date().getTimezoneOffset()/60;
+      S.loc={name:b(`${pos.coords.latitude.toFixed(2)}°, ${pos.coords.longitude.toFixed(2)}°`,`${pos.coords.latitude.toFixed(2)}°, ${pos.coords.longitude.toFixed(2)}°`),lat:pos.coords.latitude,lon:pos.coords.longitude,tz};save();render();$('#options').classList.add('open');},()=>toast(tr('locFail')),{timeout:10000});break;}
+  }});
+document.addEventListener('change',e=>{const t=e.target;
+  if(t.id==='citySel'){if(t.value!=='loc'){S.city=+t.value;S.loc=null;}save();render();$('#options').classList.add('open');}
+  if((t.id==='dateIn'||t.id==='dateIn2')&&t.value){const [y,m,d]=t.value.split('-').map(Number);setDate({y,m,d});render();}
+  if(t.id==='fYear'){S.fyear=+t.value;S.past=false;render();}});
+document.addEventListener('input',e=>{if(e.target.id==='fSearch'){S.q=e.target.value;const pos=e.target.selectionStart;render();const i=$('#fSearch');i.focus();i.setSelectionRange(pos,pos);}});
+document.addEventListener('keydown',e=>{if(S.view!=='day'||/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==='ArrowLeft'){setDate(addDays(S.sel,-1));render();}if(e.key==='ArrowRight'){setDate(addDays(S.sel,1));render();}});
+// swipe on phones
+let tx=null;document.addEventListener('touchstart',e=>{if(S.view==='day'&&e.target.closest('.main'))tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;tx=null;if(Math.abs(dx)>80&&!e.target.closest('.tablewrap,.tline')){setDate(addDays(S.sel,dx<0?1:-1));render();}},{passive:true});
+setInterval(()=>{if(S.view==='day'&&isToday(S.sel)&&!document.hidden){const y=scrollY;render();scrollTo(0,y);}},60000);
+applyTheme();render();
+window.PAPP={S,render,eventsOn,vratsForYear,setDate};
+</script>
+</body>
+</html>
